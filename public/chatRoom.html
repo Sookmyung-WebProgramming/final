@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>채팅방 목록</title>
+</head>
+<body>
+  <h1>채팅방 목록</h1>
+  <ul id="roomList"></ul>
+  <button id="newRoom">새 채팅방 생성</button>
+
+  <script>
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    async function loadRooms() {
+      const res = await fetch(`/chatroom/list/${user.userId}`);
+      const data = await res.json();
+      const list = document.getElementById("roomList");
+      list.innerHTML = "";
+      data.result.chatRooms.forEach(room => {
+        const li = document.createElement("li");
+        li.textContent = room.name + " (" + room.participants.map(p=>p.name).join(", ") + ")";
+        li.onclick = () => {
+          localStorage.setItem("roomId", room._id);
+          location.href = "chatRoomInfo.html";
+        };
+        list.appendChild(li);
+      });
+    }
+
+    document.getElementById("newRoom").onclick = async () => {
+      const name = prompt("채팅방 이름?");
+      const friendRes = await fetch(`/friends?userId=${user.userId}`);
+      const friendsData = await friendRes.json();
+      const friendList = friendsData.result.map(f => `${f.userId}:${f.name}`).join("\n");
+      const selected = prompt(`초대할 친구를 입력하세요:\n${friendList}\n(쉼표로 구분)`);
+
+      if (!selected) return;
+      const userIds = selected.split(",").map(s => s.trim().split(":")[0]);
+
+      await fetch("/chatroom/create", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ name, hostId: user.userId, userIds })
+      });
+      loadRooms();
+    };
+
+    loadRooms();
+  </script>
+</body>
+</html>
