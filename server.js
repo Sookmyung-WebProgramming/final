@@ -42,7 +42,4 @@ io.on("connection", socket => {
 
 // 서버 시작
 connectDB();
-
-// Render 배포용: 환경변수 PORT 사용
-const PORT = process.env.PORT || 8080;
-server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+server.listen(8080, () => console.log("🚀 Server running on port 8080"));
