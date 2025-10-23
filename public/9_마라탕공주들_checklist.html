@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>송이톡 - 친구들과 소통하는 공간</title>
+  <link rel="stylesheet" href="9_마라탕공주들_style.css">
+  <link rel="stylesheet" href="css/9_마라탕공주들_checklist.css">
+</head>
+<body>
+
+<!-- 네비게이션 -->
+<nav>
+  <div class="logo">
+    <a href="9_마라탕공주들_index.html">
+      <img src="images/9_logo.svg" alt="송이톡 로고">
+    </a>
+  </div>
+
+  <ul class="menu">
+    <li><a href="9_마라탕공주들_index.html">홈</a></li>
+    <li><a href="9_마라탕공주들_chat_list.html">채팅</a></li>
+    <li><a href="9_마라탕공주들_checklist.html" class="active">체크리스트</a></li>
+    <li><a href="9_마라탕공주들_history.html">보관함</a></li>
+    <li><a href="9_마라탕공주들_setting.html">설정</a></li>
+  </ul>
+
+  <div class="nav-right-container">
+    <!-- 검색창 -->
+    <div class="search-container">
+      <input type="text" placeholder="검색 (친구, 채팅, 보관함 등)">
+      <button>검색</button>
+    </div>
+
+    <!-- 프로필 -->
+    <div class="nav-right">
+      <a href="9_마라탕공주들_login.html" class="profile">
+        <img src="images/9_profile.jpg" alt="프로필 사진" class="profile-img" width="30" height="30">
+        <span id="userId">사용자Id</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- 날짜 선택을 위한 숨겨진 라디오 버튼들 -->
+<input type="radio" name="date-select" id="date-12" class="date-radio" checked>
+<input type="radio" name="date-select" id="date-15" class="date-radio">
+<input type="radio" name="date-select" id="date-20" class="date-radio">
+<input type="radio" name="date-select" id="date-25" class="date-radio">
+
+<!-- 채팅방 필터를 위한 체크박스들 -->
+<input type="checkbox" id="filter-all" class="filter-checkbox" checked>
+<input type="checkbox" id="filter-friend" class="filter-checkbox">
+<input type="checkbox" id="filter-team" class="filter-checkbox">
+<input type="checkbox" id="filter-meeting" class="filter-checkbox">
+<input type="checkbox" id="filter-study" class="filter-checkbox">
+
+<div class="page-container">
+    <!-- 1행: 필터 + 달력 -->
+    <div class="row-top">
+        <!-- 필터 섹션 -->
+        <div class="filter-section">
+            <h3>채팅방 필터</h3>
+            <div class="filter-options">
+                <label class="filter-item">
+                    <input type="checkbox" checked>
+                    <span>전체</span>
+                </label>
+                <label class="filter-item">
+                    <input type="checkbox">
+                    <span>홍길동 채팅방</span>
+                </label>
+                <label class="filter-item">
+                    <input type="checkbox">
+                    <span>팀플 채팅방</span>
+                </label>
+                <label class="filter-item">
+                    <input type="checkbox">
+                    <span>회의 채팅방</span>
+                </label>
+                <label class="filter-item">
+                    <input type="checkbox">
+                    <span>스터디 채팅방</span>
+                </label>
+                <label class="filter-item">
+                    <input type="checkbox">
+                    <span>프로젝트 채팅방</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- 달력 섹션 -->
+        <div class="calendar-section">
+            <div class="calendar">
+                <div class="calendar-header">
+                    <button class="nav-button prev-month-btn">‹</button>
+                    <span class="month">2025년 10월</span>
+                    <button class="nav-button next-month-btn">›</button>
+                </div>
+                <div class="calendar-grid">
+                    <div class="day-name">일</div>
+                    <div class="day-name">월</div>
+                    <div class="day-name">화</div>
+                    <div class="day-name">수</div>
+                    <div class="day-name">목</div>
+                    <div class="day-name">금</div>
+                    <div class="day-name">토</div>
+
+                    <div class="day prev-month">28</div>
+                    <div class="day prev-month">29</div>
+                    <div class="day prev-month">30</div>
+                    <div class="day">1</div>
+                    <div class="day">2</div>
+                    <div class="day">3</div>
+                    <div class="day">4</div>
+
+                    <div class="day">5</div>
+                    <div class="day">6</div>
+                    <div class="day">7</div>
+                    <div class="day">8</div>
+                    <div class="day">9</div>
+                    <div class="day">10</div>
+                    <div class="day">11</div>
+
+                    <label for="date-12" class="day today has-tasks">12</label>
+                    <div class="day">13</div>
+                    <div class="day">14</div>
+                    <label for="date-15" class="day has-tasks">15</label>
+                    <div class="day">16</div>
+                    <div class="day">17</div>
+                    <div class="day">18</div>
+
+                    <div class="day">19</div>
+                    <label for="date-20" class="day has-tasks">20</label>
+                    <div class="day">21</div>
+                    <div class="day">22</div>
+                    <div class="day">23</div>
+                    <div class="day">24</div>
+                    <label for="date-25" class="day has-tasks">25</label>
+
+                    <div class="day">26</div>
+                    <div class="day">27</div>
+                    <div class="day">28</div>
+                    <div class="day">29</div>
+                    <div class="day">30</div>
+                    <div class="day">31</div>
+                    <div class="day next-month">1</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2행: 할 일 + 공지 -->
+    <div class="row-bottom">
+        <!-- 할 일 섹션 -->
+        <div class="tasks-section">
+            <h3>할 일</h3>
+            
+            <!-- 10월 12일 할 일 -->
+            <div class="content-group" data-date="12">
+                <div class="selected-date">2025년 10월 12일</div>
+                <ul class="task-list">
+                    <li class="task-item" data-chat="friend">
+                        <input type="checkbox" id="task1">
+                        <label for="task1">홍길동과 채팅</label>
+                        <a href="9_마라탕공주들_chat_detail.html" class="chat-badge">홍길동 채팅방</a>
+                    </li>
+                    <li class="task-item" data-chat="team">
+                        <input type="checkbox" id="task2">
+                        <label for="task2">팀플 자료 준비</label>
+                        <a href="9_마라탕공주들_chat_detail.html" class="chat-badge">팀플 채팅방</a>
+                    </li>
+                    <li class="task-item" data-chat="meeting">
+                        <input type="checkbox" id="task3">
+                        <label for="task3">회의 참석</label>
+                        <a href="9_마라탕공주들_chat_detail.html" class="chat-badge">회의 채팅방</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 10월 15일 할 일 -->
+            <div class="content-group" data-date="15">
+                <div class="selected-date">2025년 10월 15일</div>
+                <ul class="task-list">
+                    <li class="task-item" data-chat="team">
+                        <input type="checkbox" id="task4">
+                        <label for="task4">프로젝트 발표 준비</label>
+                        <a href="9_마라탕공주들_chat_detail.html" class="chat-badge">프로젝트 채팅방</a>
+                    </li>
+                    <li class="task-item" data-chat="team">
+                        <input type="checkbox" id="task5">
+                        <label for="task5">보고서 작성</label>
+                        <a href="9_마라탕공주들_chat_detail.html" class="chat-badge">팀플 채팅방</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 10월 20일 할 일 -->
+            <div class="content-group" data-date="20">
+                <div class="selected-date">2025년 10월 20일</div>
+                <ul class="task-list">
+                    <li class="task-item" data-chat="friend">
+                        <input type="checkbox" id="task6">
+                        <label for="task6">친구와 약속</label>
+                        <a href="9_마라탕공주들_chat_detail.html" class="chat-badge">홍길동 채팅방</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 10월 25일 할 일 -->
+            <div class="content-group" data-date="25">
+                <div class="selected-date">2025년 10월 25일</div>
+                <ul class="task-list">
+                    <li class="task-item" data-chat="study">
+                        <input type="checkbox" id="task7">
+                        <label for="task7">스터디 모임</label>
+                        <a href="9_마라탕공주들_chat_detail.html" class="chat-badge">스터디 채팅방</a>
+                    </li>
+                    <li class="task-item" data-chat="study">
+                        <input type="checkbox" id="task8" checked>
+                        <label for="task8">도서관 예약</label>
+                        <a href="9_마라탕공주들_chat_detail.html" class="chat-badge">스터디 채팅방</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 공지 섹션 -->
+        <div class="notice-section">
+            <h3>공지</h3>
+            
+            <!-- 10월 12일 공지 -->
+            <div class="content-group" data-date="12">
+                <div class="selected-date">2025년 10월 12일</div>
+                <ul class="notice-list">
+                    <li class="notice-item" data-chat="team">
+                        <div class="notice-header">
+                            <strong>팀플 일정 변경 안내</strong>
+                            <a href="9_마라탕공주들_chat_detail.html" class="chat-badge">팀플 채팅방</a>
+                        </div>
+                        <p class="notice-content">다음 주 화요일로 일정이 변경되었습니다.</p>
+                    </li>
+                    <li class="notice-item" data-chat="meeting">
+                        <div class="notice-header">
+                            <strong>오늘 회의 장소</strong>
+                            <a href="9_마라탕공주들_chat_detail.html" class="chat-badge">회의 채팅방</a>
+                        </div>
+                        <p class="notice-content">3층 회의실에서 진행합니다.</p>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 10월 15일 공지 -->
+            <div class="content-group" data-date="15">
+                <div class="selected-date">2025년 10월 15일</div>
+                <ul class="notice-list">
+                    <li class="notice-item" data-chat="team">
+                        <div class="notice-header">
+                            <strong>프로젝트 중간 발표</strong>
+                            <a href="9_마라탕공주들_chat_detail.html" class="chat-badge">프로젝트 채팅방</a>
+                        </div>
+                        <p class="notice-content">발표 자료는 하루 전까지 공유 부탁드립니다.</p>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 10월 20일 공지 -->
+            <div class="content-group" data-date="20">
+                <div class="selected-date">2025년 10월 20일</div>
+                <ul class="notice-list">
+                    <li class="notice-item" data-chat="friend">
+                        <div class="notice-header">
+                            <strong>약속 장소 확인</strong>
+                            <a href="9_마라탕공주들_chat_detail.html" class="chat-badge">홍길동 채팅방</a>
+                        </div>
+                        <p class="notice-content">강남역 2번 출구에서 만나요!</p>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 10월 25일 공지 -->
+            <div class="content-group" data-date="25">
+                <div class="selected-date">2025년 10월 25일</div>
+                <ul class="notice-list">
+                    <li class="notice-item" data-chat="study">
+                        <div class="notice-header">
+                            <strong>스터디 자료 공유</strong>
+                            <a href="9_마라탕공주들_chat_detail.html" class="chat-badge">스터디 채팅방</a>
+                        </div>
+                        <p class="notice-content">이번 주 학습 자료가 업로드되었습니다.</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="authCheck.js"></script>
+
+
+</body>
+</html>

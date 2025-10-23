@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>로그인 / 회원가입</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+
+    <!-- 로그인 -->
+    <div class="login-container">
+      <h2>로그인</h2>
+      <form id="loginForm">
+        <input type="text" name="userId" placeholder="아이디" required />
+        <input type="password" name="password" placeholder="비밀번호" required />
+        <button type="submit">로그인</button>
+      </form>
+      <p id="loginMessage"></p>
+    </div>
+
+    <!-- 회원가입 -->
+    <div class="register-container">
+      <h2>회원가입</h2>
+      <form id="registerForm">
+        <input type="text" name="userId" placeholder="아이디" required />
+        <input type="password" name="password" placeholder="비밀번호" required />
+        <input type="text" name="name" placeholder="이름" required />
+        <button type="submit">회원가입</button>
+      </form>
+      <p id="registerMessage"></p>
+    </div>
+
+  </div>
+
+  <script>
+    // ===== 로그인 =====
+    const loginForm = document.getElementById("loginForm");
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const data = {
+        userId: loginForm.userId.value,
+        password: loginForm.password.value
+      };
+
+      try {
+        const res = await fetch("/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+          credentials: "include" // 쿠키 포함
+        });
+        const result = await res.json();
+        document.getElementById("loginMessage").textContent = result.message;
+
+        if (result.success) {
+          alert(`${result.name}님 환영합니다!`);
+          location.href = "/9_마라탕공주들_index.html";
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    });
+
+    // ===== 회원가입 =====
+    const registerForm = document.getElementById("registerForm");
+    registerForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const data = {
+        userId: registerForm.userId.value,
+        password: registerForm.password.value,
+        name: registerForm.name.value
+      };
+
+      try {
+        const res = await fetch("/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+          credentials: "include" // 쿠키 포함
+        });
+        const result = await res.json();
+        document.getElementById("registerMessage").textContent = result.message;
+
+        if (result.success) {
+          alert(`${result.name}님 회원가입 및 로그인 완료!`);
+          location.href = "/9_마라탕공주들_index.html"; // 자동 이동
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>

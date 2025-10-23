@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>송이톡 - 친구들과 소통하는 공간</title>
+  <link rel="stylesheet" href="9_마라탕공주들_style.css">
+  <link rel="stylesheet" href="css/9_마라탕공주들_index.css">
+</head>
+<body>
+
+<!-- 네비게이션 -->
+<nav>
+  <div class="logo">
+    <a href="9_마라탕공주들_index.html">
+      <img src="images/9_logo.svg" alt="송이톡 로고">
+    </a>
+  </div>
+
+  <ul class="menu">
+    <li><a href="9_마라탕공주들_index.html" class="active">홈</a></li>
+    <li><a href="9_마라탕공주들_chat_list.html">채팅</a></li>
+    <li><a href="9_마라탕공주들_checklist.html">체크리스트</a></li>
+    <li><a href="9_마라탕공주들_history.html">보관함</a></li>
+    <li><a href="9_마라탕공주들_setting.html">설정</a></li>
+  </ul>
+
+  <div class="nav-right-container">
+    <!-- 검색창 -->
+    <div class="search-container">
+      <input type="text" placeholder="검색 (친구, 채팅, 보관함 등)">
+      <button>검색</button>
+    </div>
+
+    <!-- 프로필 -->
+    <div class="nav-right">
+      <a href="9_마라탕공주들_login.html" class="profile">
+        <img src="images/9_profile.jpg" alt="프로필 사진" class="profile-img" width="30" height="30">
+        <span id="userId">사용자Id</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- 메인 영역 -->
+<div class="hero">
+  <h1>송이톡에 오신 것을 환영합니다.</h1>
+  <p>친구들과 자유롭게 이야기하고, 나만의 공간을 만들어보세요.</p>
+</div>
+
+<!-- 메인 콘텐츠 -->
+<div class="container">
+  <div class="box1">
+
+  <div class="aboutme">
+    <div class ="profile-info">
+      <div class="profile-img-wrap">
+    <img src="images/9_people.png" alt="프로필사진" width="120" height="120">
+    <button class="profile-btn">
+      +
+    </button>
+    </div>
+
+    <div class="profile-text">
+      <span class="profile-name">김웹프</span>
+      <span class="profile-status">오늘도 나답게!^^</span>
+    </div>
+    </div>
+
+  </div>
+
+
+
+  <div class="sidebar">
+    <h3>오늘의 일정</h3>
+    <ul class="todo-list">
+      <li>
+        <div class="todolist-info">
+          <input type="checkbox"/>
+          <span class="todo-status">10:00</span>
+          <span class="todo-name">웹프로그래밍</span>
+          
+          <div class="check-delete">
+            <span class="circle"></span>
+            <span class="circle"></span>
+            <span class="circle"></span>
+        </div>
+        </div>
+      </li>
+
+ 
+
+      <li>
+        <div class="todolist-info">
+           <input type="checkbox" />
+          <span class="todo-status">11:30</span>
+          <span class="todo-name">AI 스터디</span>
+          <div class="check-delete">
+            <span class="circle"></span>
+            <span class="circle"></span>
+            <span class="circle"></span>
+
+        
+    
+        </div>
+
+        
+        </div>
+      </li>
+
+      <li>
+        <div class="todolist-info">
+          <input type="checkbox" />
+          <span class="todo-status">16:00</span>
+          <span class="todo-name">동아리 줌회의</span>
+          <div class="check-delete">
+            <span class="circle"></span>
+            <span class="circle"></span>
+            <span class="circle"></span>
+
+        
+        </div>
+
+        
+        </div>
+      </li>
+
+      <li>
+        <div class="todolist-info">
+          <input type="checkbox" />
+          <span class="todo-status">16:00</span>
+          <span class="todo-name">동아리 줌회의</span>
+          <div class="check-delete">
+            <span class="circle"></span>
+            <span class="circle"></span>
+            <span class="circle"></span>
+
+        
+        </div>
+
+        
+        </div>
+      </li>
+
+      
+     
+    </ul>
+  </div>
+  </div>
+
+  <div class="main-content">
+
+    <div class="title">
+      <span>안읽음</span>
+      <span class="title-num">59</span>
+    </div>
+
+
+    <ul class="unread-chat-list">
+      <li>
+        <a href="9_마라탕공주들_chat_detail.html">
+          <span class="chat-img"></span>
+
+          <div class="chat-text">
+          <span class="chat-name">김자반</span>
+          <span class="chat-preview">내일까지 제출 부탁드려요!</span>
+          </div>
+
+          <div class="chat-time">
+            <span class="time">10:30</span>
+          <span class="unread-count">1</span>
+          </div>
+        </a>
+      </li>
+
+      <li>
+        <a href="9_마라탕공주들_chat_detail.html">
+          <span class="chat-img"></span>
+
+          <div class="chat-text">
+          <span class="chat-name">김숙명</span>
+          <span class="chat-preview">나 시험 망함,,</span>
+          </div>
+          
+          <div class="chat-time">
+            <span class="time">10:30</span>
+          <span class="unread-count">1</span>
+          </div>
+        </a>
+      </li>
+
+      <li>
+        <a href="9_마라탕공주들_chat_detail.html">
+          <div class="chat-img1">
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+          </div>
+
+          <div class="chat-text">
+          <span class="chat-name">인공지능학부 23</span>
+          <span class="chat-preview">10월 일정 안내드립니다.</span>
+          </div>
+          
+          <div class="chat-time">
+            <span class="time">10:30</span>
+          <span class="unread-count">7</span>
+          </div>
+        </a>
+      </li>
+
+
+      <li>
+        <a href="9_마라탕공주들_chat_detail.html">
+          <span class="chat-img"></span>
+
+          <div class="chat-text">
+          <span class="chat-name">홍길동</span>
+          <span class="chat-preview">안녕하세요!</span>
+          </div>
+          
+          <div class="chat-time">
+            <span class="time">10:30</span>
+          <span class="unread-count">7</span>
+          </div>
+        </a>
+      </li>
+
+      <li>
+        <a href="9_마라탕공주들_chat_detail.html">
+          <div class="chat-img1">
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+          </div>
+
+          <div class="chat-text">
+          <span class="chat-name">Hass</span>
+          <span class="chat-preview">월요일 회의는 명신관 605호에서 진행됩니다.</span>
+          </div>
+          
+          <div class="chat-time">
+            <span class="time">10:30</span>
+          <span class="unread-count">9</span>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a href="9_마라탕공주들_chat_detail.html">
+          <div class="chat-img1">
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+          </div>
+
+          <div class="chat-text">
+          <span class="chat-name">영차영차 독서하기</span>
+          <span class="chat-preview">10월 3주차 독서</span>
+          </div>
+          
+          <div class="chat-time">
+            <span class="time">10:30</span>
+          <span class="unread-count">1</span>
+          </div>
+        </a>
+      </li>
+
+      
+    </ul>
+
+  </div>
+</div>
+
+<script src="authCheck.js"></script>
+
+
+</body>
+</html>

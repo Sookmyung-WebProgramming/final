@@ -1,0 +1,172 @@
+/* ---------------- 레이아웃 ---------------- */
+.settings-container {
+  max-width: 1300px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.settings-container > h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #000000;
+}
+
+/* ---------------- 카드 그리드 ---------------- */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: minmax(200px, auto);
+  gap: 20px;
+}
+
+.setting-card {
+  margin-bottom: 0;
+}
+
+/* 반응형 */
+@media (max-width: 900px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------------- 카드 ---------------- */
+.setting-card {
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  padding: 20px 24px;
+}
+
+.setting-card h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #000000;
+}
+
+/* ---------------- 설정 아이템 ---------------- */
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.setting-item:last-child {
+  border-bottom: none;
+}
+
+.item-info {
+  max-width: 70%;
+}
+
+.item-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #222;
+}
+
+.item-desc {
+  font-size: 18px;
+  color: #555;
+  margin-top: 4px;
+}
+
+/* ---------------- 버튼 ---------------- */
+.setting-btn {
+  background-color: #8050F2; 
+  border: none;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.setting-btn:hover {
+  opacity: 0.8;
+}
+
+/* ---------------- 토글 스위치 ---------------- */
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #ccc;
+  border-radius: 24px;
+  transition: .3s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: .3s;
+}
+
+.toggle input:checked + .slider {
+  background-color: #8050F2; 
+}
+
+.toggle input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+/* ---------------- 선택 박스 ---------------- */
+.theme-select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 18px;
+  color: #333;
+  background-color: #fff;
+}
+
+/* ---------------- 로그아웃 ---------------- */
+.logout-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px; 
+  text-align: center;
+  gap: 16px; 
+}
+
+.logout-btn {
+  background-color: #8050F2; 
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.logout-btn:hover {
+  opacity: 0.85;
+}

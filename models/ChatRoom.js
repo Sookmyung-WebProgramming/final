@@ -1,14 +1,19 @@
 const mongoose = require("mongoose");
 
-const participantSchema = new mongoose.Schema({
-  userId: String,
-  name: String,
+const messageSchema = new mongoose.Schema({
+  sender: String,
+  text: String,
+  createdAt: { type: Date, default: Date.now }
 });
 
 const chatRoomSchema = new mongoose.Schema({
   name: String,
-  participants: [participantSchema],
-  createdAt: { type: Date, default: Date.now },
+  members: [String],  // userId 배열
+  lastMessage: messageSchema,
+  unreadCount: { type: Number, default: 0 },
+  favorite: { type: Boolean, default: false },
+  profileImg: String,
+  updatedAt: { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model("ChatRoom", chatRoomSchema);

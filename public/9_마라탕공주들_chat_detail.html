@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>송이톡 - 친구들과 소통하는 공간</title>
+  <link rel="stylesheet" href="9_마라탕공주들_style.css">
+  <link rel="stylesheet" href="css/9_마라탕공주들_chat_detail.css">
+</head>
+<body>
+
+<!-- 네비게이션 -->
+<nav>
+  <div class="logo">
+    <a href="9_마라탕공주들_index.html">
+      <img src="images/9_logo.svg" alt="송이톡 로고">
+    </a>
+  </div>
+
+  <ul class="menu">
+    <li><a href="9_마라탕공주들_index.html">홈</a></li>
+    <li><a href="9_마라탕공주들_chat_list.html">채팅</a></li>
+    <li><a href="9_마라탕공주들_checklist.html">체크리스트</a></li>
+    <li><a href="9_마라탕공주들_history.html">보관함</a></li>
+    <li><a href="9_마라탕공주들_setting.html">설정</a></li>
+  </ul>
+
+  <div class="nav-right-container">
+    <!-- 검색창 -->
+    <div class="search-container">
+      <input type="text" placeholder="검색 (친구, 채팅, 보관함 등)">
+      <button>검색</button>
+    </div>
+
+    <!-- 프로필 -->
+    <div class="nav-right">
+      <a href="9_마라탕공주들_login.html" class="profile">
+        <img src="images/9_profile.jpg" alt="프로필 사진" class="profile-img" width="30" height="30">
+        <span id="userId">사용자Id</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- 메인 컨테이너 -->
+<div class="container">
+
+  <!-- 왼쪽 사이드바 -->
+  <div class="sidebar">
+    <h3></h3>
+
+    <div class="widget-box">
+      <a href="9_마라탕공주들_checklist.html" class="widget-item">📅 일정</a>
+      <a href="9_마라탕공주들_history.html" class="widget-item">📸 추억</a>
+
+      <input type="checkbox" id="memo-toggle" hidden>
+      <label for="memo-toggle" class="widget-item">📝 메모</label>
+      <div class="memo-box">
+        <textarea placeholder="메모를 작성하세요..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- 오른쪽 채팅 영역 -->
+  <div class="chat-window">
+    <div class="chat-header">
+      <h2>홍길동</h2>
+      <div class="member-count">2</div>
+    </div>
+
+    <div class="chat-messages">
+      <div class="message friend">
+        <img src="images/9_카톡 기본프로필 사진.jpg" alt="홍길동" class="chat-img">
+        
+        <div class="chat-content">
+          <div class="chat-name">홍길동</div>
+
+          <div class="bubble-row">
+            <div class="bubble">안녕하세요!</div>
+            <div class="meta">
+              <span class="time">12:30</span>
+              <span class="reply">↩</span>
+              <input type="checkbox" id="heart1" checked>
+              <label for="heart1" class="heart">❤️</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+      <div class="message me">
+        <img src="images/9_profile.jpg" alt="홍길동" class="chat-img">
+
+        <div class="chat-content">
+          <div class="chat-name">나</div>
+
+          <div class="bubble-row">
+            <div class="bubble">안녕하세요~ 반가워요 😊</div>
+            <div class="meta">
+              <span class="time">12:31</span>
+              <span class="reply">↪</span>
+              <input type="checkbox" id="heart2" checked>
+              <label for="heart2" class="heart">❤️</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="message friend">
+        <img src="images/9_카톡 기본프로필 사진.jpg" alt="홍길동" class="chat-img">
+
+        <div class="chat-content">
+          <div class="chat-name">홍길동</div>
+
+          <div class="bubble-row">
+            <div class="bubble">오늘 일정 공유드릴게요!</div>
+            <div class="meta">
+              <span class="time">12:35</span>
+              <span class="reply">↩</span>
+              <input type="checkbox" id="heart3">
+              <label for="heart3" class="heart">❤️</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    <div class="chat-input">
+      <label for="file-upload" class="attach-btn">＋</label>
+      <input type="file" id="file-upload" hidden>
+      <input type="text" placeholder="메시지를 입력하세요...">
+      <button class="send-btn">전송</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="authCheck.js"></script>
+
+
+</body>
+</html>
