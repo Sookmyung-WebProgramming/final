@@ -5,7 +5,6 @@ const userService = require("../services/userService");
 
 // 채팅 목록 API
 router.get("/api/chatrooms", userService.authenticate, async (req, res) => {
-  console.log("채팅 목록 API 호출됨", req.user);
   try {
     // 로그인된 사용자가 속한 채팅방 가져오기
     const rooms = await ChatRoom.find({ members: req.user.userId })
@@ -13,6 +12,7 @@ router.get("/api/chatrooms", userService.authenticate, async (req, res) => {
       .lean();
     
     const chatRooms = rooms.map(r => ({
+      _id: r._id,
       name: r.name,
       lastSender: r.lastMessage?.sender || "",
       lastMessage: r.lastMessage?.text || "",

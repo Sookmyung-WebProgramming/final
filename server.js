@@ -9,12 +9,19 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
+
+
 // ===== 라우터 등록 (static보다 먼저) =====
 const userRouter = require("./routes/userRouter");
 app.use("/", userRouter);
 
 const chatListRouter = require("./routes/chatListRouter");
 app.use("/", chatListRouter);
+
+const chatDetailRouter = require("./routes/chatDetailRouter");
+app.use("/", chatDetailRouter);
+
+
 
 // 정적 파일 제공
 app.use(express.static(path.join(__dirname, "public")));

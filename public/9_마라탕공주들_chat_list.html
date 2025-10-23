@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       // 채팅 내용
       const li = document.createElement("li");
       li.innerHTML = `
-        <a href="9_마라탕공주들_chat_detail.html?room=${encodeURIComponent(room.name)}">
+          <a href="9_마라탕공주들_chat_detail.html?roomId=${encodeURIComponent(room._id)}">
           <div class="chat-info">
             <span class="chat-name">${room.name}</span><br>
             <span class="chat-preview">${room.lastSender || ''}: ${room.lastMessage || ''}</span>
