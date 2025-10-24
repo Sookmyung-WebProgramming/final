@@ -47,7 +47,6 @@
   <!-- 왼쪽 사이드바 -->
   <div class="sidebar">
     <h3></h3>
-
     <div class="widget-box">
       <a href="9_마라탕공주들_checklist.html" class="widget-item">📅 일정</a>
       <a href="9_마라탕공주들_history.html" class="widget-item">📸 추억</a>
@@ -60,6 +59,10 @@
     </div>
   </div>
 
+  <!-- 채팅 본문 -->
+  <div class="chat-section">
+    <div class="chat-messages"></div>
+
     <div class="chat-input">
       <label for="file-upload" class="attach-btn">＋</label>
       <input type="file" id="file-upload" hidden>
@@ -70,43 +73,66 @@
 
 </div>
 
+<!-- 로그인 확인 스크립트 -->
 <script src="authCheck.js"></script>
+
+<!-- Socket.IO 클라이언트 -->
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     console.log("✅ DOMContentLoaded");
 
-    // 1. 로그인 사용자 정보 가져오기
+    // ===== 1. 로그인 정보 가져오기 =====
     const meRes = await fetch("/api/me", { credentials: "include" });
     if (!meRes.ok) throw new Error(`HTTP error! status: ${meRes.status}`);
     const meData = await meRes.json();
     if (!meData.success) throw new Error("로그인 정보 없음");
+
+    const userId = meData.userId;
     document.getElementById("userId").textContent = meData.name;
 
-    // 2️. URL에서 roomId 가져오기
+    // ===== 2. URL에서 roomId 가져오기 =====
     const params = new URLSearchParams(window.location.search);
     const roomId = params.get("roomId");
     if (!roomId) throw new Error("roomId가 URL에 없음");
 
     const messagesContainer = document.querySelector(".chat-messages");
-    messagesContainer.innerHTML = "";
 
-    // 3. 서버에서 메시지 가져오기
+    // ===== 3. 기존 메시지 불러오기 =====
     const res = await fetch(`/api/chatrooms/${encodeURIComponent(roomId)}/messages`, { credentials: "include" });
-    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
     const data = await res.json();
     if (!data.success) throw new Error("메시지 불러오기 실패");
+    data.messages.forEach(addMessageToDOM);
 
-    // 4️. 메시지 DOM 생성
-    data.messages.forEach(msg => {
+    // ===== 4. Socket.IO 연결 =====
+    const socket = io(); // 서버와 연결
+    socket.emit("joinRoom", roomId); // 방 참가
+
+    // ===== 5. 메시지 수신 =====
+    socket.on("chatMessage", (msg) => {
+      addMessageToDOM(msg);
+    });
+
+    // ===== 6. 메시지 전송 =====
+    const sendBtn = document.querySelector(".send-btn");
+    const input = document.querySelector(".chat-input input[type='text']");
+    sendBtn.addEventListener("click", () => {
+      const content = input.value.trim();
+      if (!content) return;
+      socket.emit("chatMessage", { roomId, sender: userId, content });
+      input.value = "";
+    });
+
+    // ===== 7. 메시지 DOM 추가 함수 =====
+    function addMessageToDOM(msg) {
       const div = document.createElement("div");
-      div.className = msg.sender === meData.userId ? "message me" : "message friend";
-
+      div.className = msg.sender === userId ? "message me" : "message friend";
       div.innerHTML = `
-        <img src="${msg.sender === meData.userId ? 'images/9_profile.jpg' : 'images/9_카톡 기본프로필 사진.jpg'}" class="chat-img">
+        <img src="${msg.sender === userId ? 'images/9_profile.jpg' : 'images/9_카톡 기본프로필 사진.jpg'}" class="chat-img">
         <div class="chat-content">
-          <div class="chat-name">${msg.sender === meData.userId ? "나" : msg.sender}</div>
+          <div class="chat-name">${msg.sender === userId ? "나" : msg.sender}</div>
           <div class="bubble-row">
             <div class="bubble">${msg.content}</div>
             <div class="meta">
@@ -116,17 +142,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         </div>
       `;
       messagesContainer.appendChild(div);
-    });
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
 
   } catch (err) {
     console.error("❌ 채팅 불러오기 실패:", err);
     const messagesContainer = document.querySelector(".chat-messages");
-    messagesContainer.innerHTML = `<div>메시지를 불러올 수 없습니다.</div>`;
+    if (messagesContainer)
+      messagesContainer.innerHTML = `<div>메시지를 불러올 수 없습니다.</div>`;
   }
 });
 </script>
-
-
 
 </body>
 </html>
