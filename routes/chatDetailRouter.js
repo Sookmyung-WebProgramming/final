@@ -11,6 +11,7 @@ router.get("/api/chatrooms/:roomId/messages", userService.authenticate, async (r
     // Message 컬렉션에서 roomId와 일치하는 메시지 조회
     const messages = await Message.find({ chatRoom: roomId })
       .sort({ createdAt: 1 }) // 시간 순 정렬
+      .populate("sender", "name userId") // sender ObjectId → name, userId 포함
       .lean();
 
     res.json({ success: true, messages });
