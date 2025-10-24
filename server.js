@@ -27,6 +27,14 @@ app.use("/", chatListRouter);
 const chatDetailRouter = require("./routes/chatDetailRouter");
 app.use("/", chatDetailRouter);
 
+const friendsRouter = require("./routes/friends");
+app.use("/", friendsRouter);
+
+const chatRoomRouter = require("./routes/chatrooms");
+app.use("/", chatRoomRouter);
+
+
+
 // ===== MongoDB 연결 =====
 mongoose.connect("mongodb://127.0.0.1:27017/chat_service")
   .then(() => console.log("✅ MongoDB 연결 성공"))

@@ -35,6 +35,20 @@
   </div>
 </nav>
 
+<!-- 친구 목록 모달 -->
+<div id="friendModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>친구 선택</h3>
+    
+    <!-- 채팅방 이름 입력 -->
+    <input type="text" id="chatRoomName" placeholder="채팅방 이름 입력" style="width:100%; margin-bottom:10px; padding:5px;">
+    
+    <ul id="friendList"></ul>
+    <button id="createChatRoomConfirm">채팅방 생성</button>
+  </div>
+</div>
+
 <div class="container">
   <aside class="chat-list-sidebar">
     <h3>채팅 필터<hr></h3>
@@ -47,7 +61,11 @@
   </aside>
 
   <div class="main-content chat-list">
-    <h3>채팅방 목록<hr></h3>
+    <h3 style="display:flex; justify-content:space-between; align-items:center;">
+      채팅방 목록
+      <button id="createRoomBtn" style="padding:5px 10px;">채팅방 만들기</button>
+    </h3>
+    <hr>
     <div class="subBox">
       <div class="list-img">
         <ul class="unread-chat-list" id="chatProfiles"></ul>
