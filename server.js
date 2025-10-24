@@ -33,6 +33,8 @@ app.use("/", friendsRouter);
 const chatRoomRouter = require("./routes/chatrooms");
 app.use("/", chatRoomRouter);
 
+const checklistRouter = require("./routes/checklistRouter");
+app.use("/", checklistRouter);
 
 
 // ===== MongoDB 연결 =====
