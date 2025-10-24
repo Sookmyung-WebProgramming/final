@@ -8,4 +8,5 @@ const messageSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model("Message", messageSchema);
+// ✅ 모델이 이미 있으면 재사용, 없으면 새로 생성
+module.exports = mongoose.models.Message || mongoose.model("Message", messageSchema);

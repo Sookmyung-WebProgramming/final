@@ -9,6 +9,9 @@ const app = express();
 const server = http.createServer(app); // <-- http 서버 생성
 const io = new Server(server); // <-- socket.io 서버 연결
 
+const User = require("./models/User");
+const ChatMessage = require("./models/Message"); 
+
 // 미들웨어
 app.use(express.json());
 app.use(cookieParser());
@@ -42,9 +45,34 @@ io.on("connection", (socket) => {
   });
 
   // ✅ 메시지 전송 이벤트 이름 통일
-  socket.on("chatMessage", (data) => {
+  socket.on("chatMessage", async (data) => {
     const { roomId, sender, content } = data;
     console.log(`💬 [${roomId}] ${sender}: ${content}`);
+
+    // 1️⃣ DB 저장
+    try {
+      
+      //userId -> ObjectId 조회
+      const user = await User.findOne({ userId: sender });
+      if (!user) {
+        console.error(`❌ 유효하지 않은 사용자: ${sender}`);
+        return;
+      }
+
+      // 메시지 저장
+      const chat = new ChatMessage({
+        chatRoom: new mongoose.Types.ObjectId(roomId), // roomId가 ObjectId라면 그대로
+        sender: user._id, // ObjectId
+        content,
+      });
+
+      const savedChat = await chat.save();
+      console.log(`💾 채팅 저장 성공: [${savedChat._id}] ${sender} -> ${roomId}: ${content}`);
+
+    } catch (err) {
+    console.error("❌ 채팅 저장 실패:", err);
+  }
+
 
     // 같은 방의 모든 사람에게 전송
     io.to(roomId).emit("chatMessage", {
