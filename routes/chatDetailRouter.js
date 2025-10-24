@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Message = require("../models/message");
+const Message = require("../models/Message");
 const userService = require("../services/userService");
 
 // 특정 채팅방 메시지 가져오기
@@ -8,10 +8,9 @@ router.get("/api/chatrooms/:roomId/messages", userService.authenticate, async (r
   try {
     const roomId = req.params.roomId;
 
-    // Message 컬렉션에서 roomId와 일치하는 메시지 조회
     const messages = await Message.find({ chatRoom: roomId })
-      .sort({ createdAt: 1 }) // 시간 순 정렬
-      .populate("sender", "name userId") // sender ObjectId → name, userId 포함
+      .sort({ createdAt: 1 })
+      .populate("sender", "name userId")
       .lean();
 
     res.json({ success: true, messages });

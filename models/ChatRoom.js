@@ -16,4 +16,5 @@ const chatRoomSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model("ChatRoom", chatRoomSchema);
+
+module.exports = mongoose.models.ChatRoom || mongoose.model("ChatRoom", chatRoomSchema);
