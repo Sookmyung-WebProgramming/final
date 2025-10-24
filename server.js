@@ -25,6 +25,7 @@ const friendsRouter = require("./routes/friends");
 const chatRoomRouter = require("./routes/chatrooms");
 const chatDetailRouter = require("./routes/chatDetailRouter");
 const checklistRouter = require("./routes/checklistRouter");
+const historyRouter = require("./routes/history");
 
 app.use("/", userRouter);
 app.use("/", chatListRouter);
@@ -32,7 +33,7 @@ app.use("/", friendsRouter);
 app.use("/", chatRoomRouter);
 app.use("/", chatDetailRouter);
 app.use("/", checklistRouter);
-
+app.use("/", historyRouter);
 
 // ===== MongoDB 연결 =====
 mongoose.connect("mongodb://127.0.0.1:27017/chat_service")
