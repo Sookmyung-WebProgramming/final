@@ -8,9 +8,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const userId = meData.userId;
     document.getElementById("userId").textContent = meData.name;
 
-    // ===== roomId 가져오기 =====
+    // ===== roomId, scrollTime 가져오기 =====
     const params = new URLSearchParams(window.location.search);
     const roomId = params.get("roomId");
+    const scrollTime = params.get("time"); // ISO 문자열
     if (!roomId) throw new Error("roomId가 URL에 없음");
 
     const messagesContainer = document.querySelector(".chat-messages");
@@ -18,24 +19,35 @@ document.addEventListener("DOMContentLoaded", async () => {
     // ===== 기존 메시지 로드 =====
     const res = await fetch(`/api/chatrooms/${encodeURIComponent(roomId)}/messages`, { credentials: "include" });
     const data = await res.json();
-    if (data.success) data.messages.forEach(addMessageToDOM);
+    if (data.success) {
+      data.messages.forEach(addMessageToDOM);
+
+      // 특정 시점 메시지로 스크롤
+      if (scrollTime) {
+        const target = messagesContainer.querySelector(`[data-created-at="${scrollTime}"]`);
+        if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
+      } else {
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+    }
 
     // ===== Socket.IO 연결 =====
     const socket = io();
     socket.emit("joinRoom", roomId);
-    socket.on("chatMessage", (msg) => addMessageToDOM(msg));
+    socket.on("chatMessage", (msg) => {
+      addMessageToDOM(msg);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight; // 새 메시지 오면 아래로
+    });
 
     // ===== 텍스트 전송 =====
     const sendBtn = document.querySelector(".send-btn");
     const input = document.querySelector(".chat-input input[type='text']");
-
     function sendTextMessage() {
       const content = input.value.trim();
       if (!content) return;
       socket.emit("chatMessage", { roomId, sender: userId, content, type: "text" });
       input.value = "";
     }
-
     sendBtn.addEventListener("click", sendTextMessage);
     input.addEventListener("keydown", (e) => { if (e.key === "Enter") sendTextMessage(); });
 
@@ -53,7 +65,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       else if (/\.xlsx$|\.pdf$|\.docx$/i.test(file.name)) type = "file";
       else type = "text";
 
-      // 테스트용 샘플 링크
+      // 샘플 링크 (테스트용)
       switch(type) {
         case "image": content = "https://news.samsungdisplay.com/wp-content/uploads/2018/08/8.jpg"; break;
         case "video": content = "https://youtu.be/YTgazB4a0uY?si=aVUdwWmPiPwnoZ9D"; break;
@@ -69,6 +81,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const div = document.createElement("div");
       const isMe = msg.sender.userId === userId;
       div.className = isMe ? "message me" : "message friend";
+      div.dataset.createdAt = msg.createdAt; // ✅
 
       let contentHTML = "";
       switch(msg.type) {
@@ -97,11 +110,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         </div>
       `;
       messagesContainer.appendChild(div);
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 
   } catch (err) {
-    console.error("❌ 채팅 불러오기 실패:", err);
+    console.error("채팅 불러오기 실패:", err);
     document.querySelector(".chat-messages").innerHTML = `<div>메시지를 불러올 수 없습니다.</div>`;
   }
 });
