@@ -16,6 +16,7 @@ router.get("/api/history", async (req, res) => {
     // 2. 응답 구조 가공
     const result = messages.map(msg => ({
       id: msg._id,
+      chatRoomId: msg.chatRoom?._id,
       chatRoomName: msg.chatRoom?.title || "알 수 없음",
       senderName: msg.sender?.name || "익명",
       type: msg.type,

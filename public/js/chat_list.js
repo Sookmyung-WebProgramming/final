@@ -71,6 +71,14 @@ createRoomBtn.addEventListener("click", async () => {
     const data = await res.json();
     if (!data.success) throw new Error("친구 목록 불러오기 실패");
 
+    // ✅ 안전 처리
+    const friends = Array.isArray(data.friends) ? data.friends : [];
+    if (friends.length === 0) {
+      friendListEl.innerHTML = `<li>친구 목록이 없습니다.</li>`;
+      return;
+    }
+
+
     data.friends.forEach(user => {
       const li = document.createElement("li");
       li.classList.add("friend-item");

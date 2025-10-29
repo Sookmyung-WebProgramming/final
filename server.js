@@ -11,7 +11,7 @@ const io = new Server(server);
 
 const User = require("./models/User");
 const ChatMessage = require("./models/Message");
-const ChatRoom = require("./models/ChatRoom"); // ChatRoom 모델 필요
+const ChatRoom = require("./models/ChatRoom"); 
 
 // 미들웨어
 app.use(express.json());
@@ -44,7 +44,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/chat_service")
 function determineMessageType(content) {
   if (/\.jpg$|\.png$|\.jpeg$/i.test(content)) return "image";
   if (/\.mp4$|\.mov$|\.avi$/i.test(content)) return "video";
-  if (/\.xlsx$|\.pdf$|\.docx$/i.test(content)) return "file";   // file 먼저
+  if (/\.xlsx$|\.pdf$|\.docx$/i.test(content)) return "file";  
   if (/^https?:\/\//i.test(content)) return "link";
   return "text";
 }
@@ -63,11 +63,11 @@ function convertToSampleLink(content) {
 
 // Socket.IO
 io.on("connection", (socket) => {
-  console.log("🔗 새 클라이언트 접속:", socket.id);
+  console.log("새 클라이언트 접속 : ", socket.id);
 
   socket.on("joinRoom", (roomId) => {
     socket.join(roomId);
-    console.log(`🟢 ${socket.id}가 방 ${roomId}에 입장`);
+    console.log(`${socket.id}가 방 ${roomId}에 입장`);
   });
 
   socket.on("chatMessage", async (data) => {
@@ -75,7 +75,7 @@ io.on("connection", (socket) => {
 
     try {
       const user = await User.findOne({ userId: sender });
-      if (!user) return console.error(`❌ 유효하지 않은 사용자: ${sender}`);
+      if (!user) return console.error(`유효하지 않은 사용자 : ${sender}`);
 
       const type = determineMessageType(content);
       const finalContent = convertToSampleLink(content);
@@ -93,17 +93,17 @@ io.on("connection", (socket) => {
         .lean();
 
       io.to(roomId).emit("chatMessage", populatedChat);
-      console.log(`💾 저장 & 전송 완료: ${populatedChat.content} [${populatedChat.type}] by ${populatedChat.sender.name}`);
+      console.log(`저장 & 전송 완료 : ${populatedChat.content} [${populatedChat.type}] by ${populatedChat.sender.name}`);
 
     } catch (err) {
-      console.error("❌ 채팅 처리 실패:", err);
+      console.error("채팅 처리 실패 :", err);
     }
   });
 
   socket.on("disconnect", () => {
-    console.log("❌ 클라이언트 연결 종료:", socket.id);
+    console.log("클라이언트 연결 종료 :", socket.id);
   });
 });
 
 // 서버 실행
-server.listen(3000, () => console.log("🚀 서버 실행 중: http://localhost:3000"));
+server.listen(3000, () => console.log("서버 실행 중 : http://localhost:3000"));

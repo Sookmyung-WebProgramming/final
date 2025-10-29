@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
           <!-- 2️⃣ 메타 클릭 시 채팅 시점으로 이동 -->
           <div class="media-meta"
-               data-room-id="${item.chatRoom}"
+               data-room-id="${item.chatRoomId}"
                data-message-id="${item._id}"
                data-created-at="${item.createdAt}">
             <p class="media-title">${item.senderName || "알 수 없음"} : ${item.content}</p>
@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       if (roomId && createdAt) {
         console.log(`🔹 이동: room=${roomId}, time=${createdAt}`);
-        window.location.href = `/9_마라탕공주들_chat_detail.html?room=${encodeURIComponent(roomId)}&time=${encodeURIComponent(createdAt)}`;
+        window.location.href = `/9_마라탕공주들_chat_detail.html?roomId=${encodeURIComponent(roomId)}&time=${encodeURIComponent(createdAt)}`;
       } else {
         console.warn("⚠️ roomId 또는 createdAt이 undefined입니다.");
       }
