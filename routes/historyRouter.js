@@ -2,10 +2,10 @@ const express = require("express");
 const router = express.Router();
 const Message = require("../models/Message");
 
-// ✅ 보관함용 메시지 조회 API
+// 보관함용 메시지 조회 API
 router.get("/api/history", async (req, res) => {
   try {
-    // 1. 보관함은 텍스트 제외
+    // 보관함은 텍스트 제외
     const messages = await Message.find({
       type: { $in: ["image", "video", "file", "link"] }
     })
@@ -13,7 +13,7 @@ router.get("/api/history", async (req, res) => {
       .populate("chatRoom", "title")            // 채팅방 이름
       .sort({ createdAt: -1 });                 // 최신순
 
-    // 2. 응답 구조 가공
+    // 응답 구조 가공
     const result = messages.map(msg => ({
       id: msg._id,
       chatRoomId: msg.chatRoom?._id,

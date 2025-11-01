@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       else if (/\.xlsx$|\.pdf$|\.docx$/i.test(file.name)) type = "file";
       else type = "text";
 
-      // 샘플 링크 (테스트용)
+      // 샘플 링크 (실제 S3 대신 샘플로 저장) 
       switch(type) {
         case "image": content = "https://news.samsungdisplay.com/wp-content/uploads/2018/08/8.jpg"; break;
         case "video": content = "https://youtu.be/YTgazB4a0uY?si=aVUdwWmPiPwnoZ9D"; break;
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const div = document.createElement("div");
       const isMe = msg.sender.userId === userId;
       div.className = isMe ? "message me" : "message friend";
-      div.dataset.createdAt = msg.createdAt; // ✅
+      div.dataset.createdAt = msg.createdAt; 
 
       let contentHTML = "";
       switch(msg.type) {

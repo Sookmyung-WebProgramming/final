@@ -37,7 +37,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// ===== 로그인한 사용자 정보 =====
+// 로그인한 사용자 정보 가져오기 API 
 router.get("/api/me", userService.authenticate, (req, res) => {
   res.json({ success: true, userId: req.user.userId, name: req.user.name });
 });

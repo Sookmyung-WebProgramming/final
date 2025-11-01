@@ -11,7 +11,6 @@ const io = new Server(server);
 
 const User = require("./models/User");
 const ChatMessage = require("./models/Message");
-const ChatRoom = require("./models/ChatRoom"); 
 
 // 미들웨어
 app.use(express.json());
@@ -19,26 +18,22 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 // ===== 라우터 등록 =====
-const userRouter = require("./routes/userRouter");
-const chatListRouter = require("./routes/chatListRouter");
-const friendsRouter = require("./routes/friends");
-const chatRoomRouter = require("./routes/chatrooms");
 const chatDetailRouter = require("./routes/chatDetailRouter");
+const chatListRouter = require("./routes/chatListRouter");
 const checklistRouter = require("./routes/checklistRouter");
-const historyRouter = require("./routes/history");
+const historyRouter = require("./routes/historyRouter");
+const userRouter = require("./routes/userRouter");
 
-app.use("/", userRouter);
-app.use("/", chatListRouter);
-app.use("/", friendsRouter);
-app.use("/", chatRoomRouter);
 app.use("/", chatDetailRouter);
+app.use("/", chatListRouter);
 app.use("/", checklistRouter);
 app.use("/", historyRouter);
+app.use("/", userRouter);
 
 // ===== MongoDB 연결 =====
 mongoose.connect("mongodb://127.0.0.1:27017/chat_service")
   .then(() => console.log("✅ MongoDB 연결 성공"))
-  .catch((err) => console.error("❌ MongoDB 연결 실패:", err));
+  .catch((err) => console.error("❌ MongoDB 연결 실패 :", err));
 
 // 메시지 타입 판단
 function determineMessageType(content) {

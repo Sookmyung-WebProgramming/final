@@ -1,52 +1,70 @@
 const express = require("express");
 const router = express.Router();
+const Checklist = require("../models/Checklist");
 const userService = require("../services/userService");
-const checklistService = require("../services/checklistService");
 
-// 연도/월별 체크리스트 조회
+const checklistService = {
+  
+  // 월별 체크리스트 조회 (UTC 기준)
+  async getChecklistsByMonth(userId, year, month) {
+    const start = new Date(Date.UTC(year, month - 1, 1, 0, 0, 0));
+    const end = new Date(Date.UTC(year, month, 0, 23, 59, 59, 999));
+
+    return await Checklist.find({
+      userId: String(userId),
+      createdAt: { $gte: start, $lte: end },
+    }).sort({ createdAt: 1 });
+  },
+
+  // 체크 상태 토글
+  async toggleChecklist(id, userId) {
+    const checklist = await Checklist.findOne({ _id: id, userId: String(userId) });
+    if (!checklist) throw new Error("체크리스트를 찾을 수 없습니다.");
+
+    checklist.checked = !checklist.checked;
+    await checklist.save();
+    return checklist;
+  },
+
+  // 체크리스트 삭제
+  async deleteChecklist(id, userId) {
+    const checklist = await Checklist.findOneAndDelete({ _id: id, userId: String(userId) });
+    if (!checklist) throw new Error("체크리스트를 찾을 수 없습니다.");
+    return checklist;
+  },
+};
+
+
+// 월별 체크리스트 조회 API 
 router.get("/api/checklist/:year/:month", userService.authenticate, async (req, res) => {
   try {
-    console.log("🔹 /api/checklist 요청 들어옴");
-    console.log("🔹 req.user:", req.user); // 로그인 유저 정보 확인
     const { year, month } = req.params;
-    console.log(`🔹 요청 파라미터 - year: ${year}, month: ${month}`);
-
     const items = await checklistService.getChecklistsByMonth(req.user.userId, year, month);
-    console.log("🔹 checklistService.getChecklistsByMonth 결과:", items);
-
     res.json({ success: true, items });
   } catch (err) {
-    console.error("❌ /api/checklist 에러:", err);
     res.status(500).json({ success: false, message: err.message });
   }
 });
 
-// 체크 상태 토글
+// 체크 상태 토글 API 
 router.patch("/api/checklist/:id/toggle", userService.authenticate, async (req, res) => {
   try {
-    console.log("🔹 toggle 요청:", req.params.id);
     const { id } = req.params;
-    const userId = req.user.userId;
-    const checklist = await checklistService.toggleChecklist(id, userId);
-    console.log("🔹 toggle 결과:", checklist);
+    const checklist = await checklistService.toggleChecklist(id, req.user.userId);
     res.json({ success: true, checklist });
   } catch (err) {
-    console.error("❌ toggle 에러:", err);
     res.status(500).json({ success: false, message: err.message });
   }
 });
 
-// 체크리스트 삭제
+// 체크리스트 삭제 API 
 router.delete("/api/checklist/:id", userService.authenticate, async (req, res) => {
   try {
-    console.log("🔹 delete 요청:", req.params.id);
     const { id } = req.params;
-    const userId = req.user.userId;
-    const checklist = await checklistService.deleteChecklist(id, userId);
-    console.log("🔹 delete 결과:", checklist);
+    const checklist = await checklistService.deleteChecklist(id, req.user.userId);
     res.json({ success: true, checklist });
   } catch (err) {
-    console.error("❌ delete 에러:", err);
+    console.error("delete 에러:", err);
     res.status(500).json({ success: false, message: err.message });
   }
 });

@@ -3,7 +3,7 @@ const router = express.Router();
 const Message = require("../models/Message");
 const userService = require("../services/userService");
 
-// 특정 채팅방 메시지 가져오기
+// 특정 채팅방 메시지 가져오기 API 
 router.get("/api/chatrooms/:roomId/messages", userService.authenticate, async (req, res) => {
   try {
     const roomId = req.params.roomId;
