@@ -8,52 +8,61 @@
 </head>
 <body>
 
-<nav>
-  <div class="logo">
-    <a href="9_마라탕공주들_index.html">
-      <img src="images/9_logo.svg" alt="송이톡 로고">
-    </a>
-  </div>
-
-  <ul class="menu">
-    <li><a href="9_마라탕공주들_index.html">홈</a></li>
-    <li><a href="9_마라탕공주들_chat_list.html">채팅</a></li>
-    <li><a href="9_마라탕공주들_checklist.html" class="active">체크리스트</a></li>
-    <li><a href="9_마라탕공주들_history.html">보관함</a></li>
-    <li><a href="9_마라탕공주들_setting.html">설정</a></li>
-  </ul>
-
-  <div class="nav-right-container">
-    <div class="search-container">
-      <input type="text" placeholder="검색 (친구, 채팅, 보관함 등)">
-      <button>검색</button>
-    </div>
-
-    <div class="nav-right">
-      <a href="9_마라탕공주들_login.html" class="profile">
-        <img src="images/9_profile.jpg" alt="프로필 사진" class="profile-img" width="30" height="30">
-        <span id="userId">사용자Id</span>
+  <nav>
+    <div class="logo">
+      <a href="9_마라탕공주들_index.html">
+        <img src="images/9_logo.svg" alt="송이톡 로고">
       </a>
     </div>
+
+    <ul class="menu">
+      <li><a href="9_마라탕공주들_index.html">홈</a></li>
+      <li><a href="9_마라탕공주들_chat_list.html">채팅</a></li>
+      <li><a href="9_마라탕공주들_checklist.html" class="active">체크리스트</a></li>
+      <li><a href="9_마라탕공주들_history.html">보관함</a></li>
+      <li><a href="9_마라탕공주들_setting.html">설정</a></li>
+    </ul>
+
+    <div class="nav-right-container">
+      <div class="search-container">
+        <input type="text" placeholder="검색 (친구, 채팅, 보관함 등)">
+        <button>검색</button>
+      </div>
+
+      <div class="nav-right">
+        <a href="9_마라탕공주들_login.html" class="profile">
+          <img src="images/9_profile.jpg" alt="프로필 사진" class="profile-img" width="30" height="30">
+          <span id="userId">사용자Id</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 메인 콘텐츠 -->
+  <div class="page-container">
+    <!-- 왼쪽 : 달력 -->
+    <section class="calendar-section">
+      <!-- 달력 이동 버튼 -->
+      <div id="calendar-controls" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <button id="prev-month">← 이전 달</button>
+        <h2 id="calendar-header"></h2>
+        <button id="next-month">다음 달 →</button>
+      </div>
+      <!-- 달력 -->
+      <div id="calendar-dates" class="calendar-dates"></div>
+    </section>
+    <!-- 오른쪽 : 할 일 -->
+    <section class="tasks-section">
+      <h2>오늘의 할 일</h2>
+      <div id="tasks-container"></div>
+    </section>
   </div>
-</nav>
 
-<div class="page-container">
-  <!-- 달력(날짜 선택) 영역 -->
-  <div id="calendar-dates" class="calendar-dates"></div>
+  <!-- 로그인 확인 스크립트 -->
+  <script src="authCheck.js"></script>
 
-  <!-- 할 일 + 공지 영역 -->
-  <div class="row-bottom">
-    <div class="tasks-section" id="tasks-container"><h3>할 일</h3></div>
-    <div class="notice-section" id="notices-container"><h3>공지</h3></div>
-  </div>
-</div>
-
-<!-- 로그인 확인 스크립트 -->
-<script src="authCheck.js"></script>
-
-<!-- 전용 JS -->
-<script src="js/checklist.js"></script>
+  <!-- 전용 JS -->
+  <script src="js/checklist.js"></script>
 
 </body>
 </html>

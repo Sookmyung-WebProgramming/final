@@ -108,28 +108,6 @@ nav .menu a:hover {
   color:#fff
 }
 
-.memo-box {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s ease;
-}
-
-.memo-box textarea {
-  width: 100%;
-  height: 80px;
-  margin-top: 10px;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #8050F2;
-  resize: none;
-  outline: none;
-  box-sizing: border-box; 
-}
-
-#memo-toggle:checked + label + .memo-box {
-  max-height: 200px;
-}
-
 .chat-window {
   flex: 1;
   max-width: 900px;
@@ -180,6 +158,14 @@ nav .menu a:hover {
   font-size: 14px;
 }
 
+.chat-date {
+  text-align: center;
+  margin: 20px 0;
+  font-size: 14px;
+  color: #888;
+  font-weight: 500;
+}
+
 .chat-messages {
   flex: 1;
   display: flex;
@@ -216,6 +202,17 @@ nav .menu a:hover {
   color: #111;
   margin: 0 0 6px 2px;
 }
+
+.checklist-form input {
+  width: 70%;
+  padding: 2px 5px;
+  font-size: 0.9em;
+}
+.checklist-form button {
+  padding: 2px 5px;
+  font-size: 0.9em;
+}
+
 
 /* 말풍선 */
 .bubble {

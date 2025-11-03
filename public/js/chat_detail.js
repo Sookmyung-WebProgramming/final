@@ -16,20 +16,134 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const messagesContainer = document.querySelector(".chat-messages");
 
+    // ===== 전역 변수: 마지막 메시지 날짜 =====
+    let lastMessageDate = null;
+
+    // ===== 메시지 DOM 추가 함수 =====
+    function addMessageToDOM(msg) {
+    const isMe = msg.sender.userId === userId;
+    const msgDate = new Date(msg.createdAt);
+    const localDateStr = msgDate.toLocaleDateString("ko-KR");
+    const localTimeStr = msgDate.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
+
+    // 날짜 블록
+    if (lastMessageDate !== localDateStr) {
+      const dateDiv = document.createElement("div");
+      dateDiv.className = "chat-date";
+      dateDiv.textContent = localDateStr;
+      messagesContainer.appendChild(dateDiv);
+      lastMessageDate = localDateStr;
+    }
+
+    const div = document.createElement("div");
+    div.className = isMe ? "message me" : "message friend";
+    div.dataset.createdAt = msg.createdAt;
+
+    let contentHTML = "";
+    switch(msg.type){
+      case "image": contentHTML = `<img src="${msg.content}" class="chat-media">`; break;
+      case "video": contentHTML = `<a href="${msg.content}" target="_blank">동영상 보기 ▶</a>`; break;
+      case "file": contentHTML = `<a href="${msg.content}" target="_blank">파일 다운로드 📄</a>`; break;
+      case "link": contentHTML = `<a href="${msg.content}" target="_blank">${msg.content}</a>`; break;
+      case "text": contentHTML = msg.content; break;
+    }
+
+    // 메시지 HTML + 할 일 버튼
+    div.innerHTML = `
+      <img src="${isMe ? 'images/9_profile.jpg' : 'images/9_카톡 기본프로필 사진.jpg'}" class="chat-img">
+      <div class="chat-content">
+        <div class="chat-name">${isMe ? "나" : msg.sender.name}</div>
+        <div class="bubble-row">
+          <div class="bubble">${contentHTML}</div>
+          <div class="meta">
+            <span class="time">${localTimeStr}</span>
+            <button class="checklist-btn" style="margin-left:5px;">📋 할 일</button>
+          </div>
+        </div>
+        <div class="checklist-form" style="display:none; margin-top:5px;">
+          <input type="text" placeholder="할 일 입력">
+          <button class="checklist-submit">등록</button>
+        </div>
+      </div>
+    `;
+
+    messagesContainer.appendChild(div);
+
+    // ===== 토글 이벤트 =====
+    const btn = div.querySelector(".checklist-btn");
+    const form = div.querySelector(".checklist-form");
+    btn.addEventListener("click", () => {
+      form.style.display = form.style.display === "none" ? "block" : "none";
+    });
+
+    // ===== 서버 전송 =====
+    const submitBtn = div.querySelector(".checklist-submit");
+    const input = div.querySelector(".checklist-form input");
+
+    if (submitBtn && input) {
+      submitBtn.addEventListener("click", async () => {
+        const content = input.value.trim();
+        if (!content) return;
+
+        console.log("✅ 할 일 등록 시도:", { userId, roomId, messageId: msg._id, content });
+
+        try {
+          const res = await fetch("/api/checklist", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ 
+              userId, 
+              roomId, 
+              messageId: msg._id, 
+              content,
+              createdAt: msg.createdAt // 메시지 시간 그대로
+            })
+          });
+
+          const data = await res.json();
+
+          if (data.success) {
+            alert("할 일 등록 완료 ✅");
+            input.value = "";
+            form.style.display = "none";
+          } else {
+            alert("등록 실패 ❌");
+          }
+        } catch(err) {
+          console.error("fetch 오류 : ", err);
+          alert("서버 오류 ❌");
+        }
+      });
+    } else {
+      console.warn("submitBtn 또는 input을 찾을 수 없음", div);
+    }
+
+  }
+
+
     // ===== 기존 메시지 로드 =====
     const res = await fetch(`/api/chatrooms/${encodeURIComponent(roomId)}/messages`, { credentials: "include" });
     const data = await res.json();
     if (data.success) {
+      // 먼저 모든 메시지를 DOM에 추가
       data.messages.forEach(addMessageToDOM);
 
-      // 특정 시점 메시지로 스크롤
-      if (scrollTime) {
-        const target = messagesContainer.querySelector(`[data-created-at="${scrollTime}"]`);
-        if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
-      } else {
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-      }
+      // DOM 업데이트 후 다음 이벤트 루프로 스크롤 처리
+      setTimeout(() => {
+        if (scrollTime) {
+          const target = messagesContainer.querySelector(`[data-created-at="${scrollTime}"]`);
+          if (target) {
+            target.scrollIntoView({ behavior: "smooth", block: "center" });
+          } else {
+            // 특정 시간 메시지가 없으면 맨 아래로
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+          }
+        } else {
+          messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+      }, 0); // 0ms로도 DOM 렌더 후 실행됨
     }
+
 
     // ===== Socket.IO 연결 =====
     const socket = io();
@@ -65,7 +179,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       else if (/\.xlsx$|\.pdf$|\.docx$/i.test(file.name)) type = "file";
       else type = "text";
 
-      // 샘플 링크 (실제 S3 대신 샘플로 저장) 
       switch(type) {
         case "image": content = "https://news.samsungdisplay.com/wp-content/uploads/2018/08/8.jpg"; break;
         case "video": content = "https://youtu.be/YTgazB4a0uY?si=aVUdwWmPiPwnoZ9D"; break;
@@ -76,44 +189,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       fileInput.value = "";
     });
 
-    // ===== 메시지 DOM 추가 =====
-    function addMessageToDOM(msg) {
-      const div = document.createElement("div");
-      const isMe = msg.sender.userId === userId;
-      div.className = isMe ? "message me" : "message friend";
-      div.dataset.createdAt = msg.createdAt; 
-
-      let contentHTML = "";
-      switch(msg.type) {
-        case "image":
-          contentHTML = `<img src="${msg.content}" alt="이미지" class="chat-media">`; break;
-        case "video":
-          contentHTML = `<a href="${msg.content}" target="_blank">동영상 보기 ▶</a>`; break;
-        case "file":
-          contentHTML = `<a href="${msg.content}" target="_blank">파일 다운로드 📄</a>`; break;
-        case "link":
-          contentHTML = `<a href="${msg.content}" target="_blank">${msg.content}</a>`; break;
-        case "text":
-          contentHTML = msg.content; break;
-      }
-
-      div.innerHTML = `
-        <img src="${isMe ? 'images/9_profile.jpg' : 'images/9_카톡 기본프로필 사진.jpg'}" class="chat-img">
-        <div class="chat-content">
-          <div class="chat-name">${isMe ? "나" : msg.sender.name}</div>
-          <div class="bubble-row">
-            <div class="bubble">${contentHTML}</div>
-            <div class="meta">
-              <span class="time">${new Date(msg.createdAt).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
-            </div>
-          </div>
-        </div>
-      `;
-      messagesContainer.appendChild(div);
-    }
-
   } catch (err) {
-    console.error("채팅 불러오기 실패:", err);
+    console.error("채팅 불러오기 실패 :", err);
     document.querySelector(".chat-messages").innerHTML = `<div>메시지를 불러올 수 없습니다.</div>`;
   }
+
 });
