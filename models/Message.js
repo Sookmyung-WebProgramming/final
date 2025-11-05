@@ -9,7 +9,6 @@ const messageSchema = new mongoose.Schema({
     enum: ["text", "image", "video", "link", "file"], 
     default: "text" 
   },
-  readBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   createdAt: { type: Date, default: Date.now }
 });
 

@@ -11,6 +11,8 @@ const io = new Server(server);
 
 const User = require("./models/User");
 const ChatMessage = require("./models/Message");
+const ChatRoom = require("./models/chatRoom");
+const ChatRoomUserStatus = require("./models/ChatRoomUserStatus");
 
 // 미들웨어
 app.use(express.json());
@@ -30,12 +32,14 @@ app.use("/", checklistRouter);
 app.use("/", historyRouter);
 app.use("/", userRouter);
 
+
 // ===== MongoDB 연결 =====
 mongoose.connect("mongodb://127.0.0.1:27017/chat_service")
   .then(() => console.log("✅ MongoDB 연결 성공"))
   .catch((err) => console.error("❌ MongoDB 연결 실패 :", err));
 
-// 메시지 타입 판단
+
+// ===== 메시지 타입 판단 =====
 function determineMessageType(content) {
   if (/\.jpg$|\.png$|\.jpeg$/i.test(content)) return "image";
   if (/\.mp4$|\.mov$|\.avi$/i.test(content)) return "video";
@@ -44,7 +48,6 @@ function determineMessageType(content) {
   return "text";
 }
 
-// 샘플 링크 변환
 function convertToSampleLink(content) {
   const type = determineMessageType(content);
   switch(type) {
@@ -56,32 +59,98 @@ function convertToSampleLink(content) {
   }
 }
 
-// Socket.IO
-io.on("connection", (socket) => {
-  console.log("새 클라이언트 접속 : ", socket.id);
 
-  socket.on("joinRoom", (roomId) => {
-    socket.join(roomId);
-    console.log(`${socket.id}가 방 ${roomId}에 입장`);
+// ===== Socket.IO =====
+const roomMembers = new Map(); // key: roomId, value: Set(userIds)
+
+io.on("connection", (socket) => {
+  console.log("새 클라이언트 접속:", socket.id);
+
+  socket.on("registerUser", (userId) => {
+    socket.userId = userId;
+    console.log(`${socket.id}에 userId 등록: ${userId}`);
   });
 
+  socket.on("joinRoom", async (roomId) => {
+    if (!socket.userId) return socket.emit("error", "먼저 userId를 등록해주세요");
+
+    socket.join(roomId);
+    console.log(`${socket.userId}가 방 ${roomId}에 입장`);
+
+    // 참여자 목록에 추가
+    if (!roomMembers.has(roomId)) roomMembers.set(roomId, new Set());
+    roomMembers.get(roomId).add(socket.userId);
+
+    try {
+      const user = await User.findOne({ userId: socket.userId });
+      if (!user) return;
+
+      const lastMessage = await ChatMessage.findOne({ chatRoom: roomId })
+        .sort({ createdAt: -1 })
+        .lean();
+      const now = lastMessage ? lastMessage.createdAt : new Date();
+
+      await ChatRoomUserStatus.findOneAndUpdate(
+        { chatRoom: roomId, user: user._id },
+        { lastReadAt: now },
+        { upsert: true }
+      );
+    } catch (err) {
+      console.error("joinRoom lastReadAt 처리 실패 : ", err);
+    }
+  });
+
+  // 방 퇴장 처리
+  socket.on("leaveRoom", (roomId) => {
+    if (socket.userId && roomMembers.has(roomId)) {
+      roomMembers.get(roomId).delete(socket.userId);
+      console.log(`${socket.userId}가 방 ${roomId} 퇴장`);
+    }
+    socket.leave(roomId);
+  });
+
+  // 메시지 전송
   socket.on("chatMessage", async (data) => {
     const { roomId, sender, content } = data;
+    if (!sender || !roomId) return;
 
     try {
       const user = await User.findOne({ userId: sender });
-      if (!user) return console.error(`유효하지 않은 사용자 : ${sender}`);
+      if (!user) return;
 
       const type = determineMessageType(content);
       const finalContent = convertToSampleLink(content);
 
       const chat = new ChatMessage({
-        chatRoom: roomId,
+        chatRoom: new mongoose.Types.ObjectId(roomId),
         sender: user._id,
         content: finalContent,
-        type
+        type,
       });
       const savedChat = await chat.save();
+
+      await ChatRoom.findByIdAndUpdate(roomId, {
+        lastMessage: {
+          content: savedChat.content,
+          sender: savedChat.sender,
+          createdAt: savedChat.createdAt,
+        },
+        updatedAt: new Date(),
+      });
+
+      // 현재 방에 실제로 있는 사람만 lastReadAt 갱신
+      const members = roomMembers.get(roomId);
+      if (members && members.size > 0) {
+        for (const memberUserId of members) {
+          const member = await User.findOne({ userId: memberUserId });
+          if (!member) continue;
+          await ChatRoomUserStatus.findOneAndUpdate(
+            { chatRoom: roomId, user: member._id },
+            { lastReadAt: new Date() },
+            { upsert: true }
+          );
+        }
+      }
 
       const populatedChat = await ChatMessage.findById(savedChat._id)
         .populate("sender", "name userId")
@@ -89,16 +158,20 @@ io.on("connection", (socket) => {
 
       io.to(roomId).emit("chatMessage", populatedChat);
       console.log(`저장 & 전송 완료 : ${populatedChat.content} [${populatedChat.type}] by ${populatedChat.sender.name}`);
-
     } catch (err) {
-      console.error("채팅 처리 실패 :", err);
+      console.error("채팅 처리 실패 : ", err);
     }
   });
 
   socket.on("disconnect", () => {
-    console.log("클라이언트 연결 종료 :", socket.id);
+    // disconnect 시 모든 방에서 제거
+    for (const [roomId, members] of roomMembers.entries()) {
+      members.delete(socket.userId);
+    }
+    console.log("클라이언트 연결 종료 : ", socket.id);
   });
 });
 
-// 서버 실행
+
+// ===== 서버 실행 =====
 server.listen(3000, () => console.log("서버 실행 중 : http://localhost:3000"));

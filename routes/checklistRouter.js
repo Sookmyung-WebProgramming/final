@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Checklist = require("../models/Checklist");
-const ChatRoom = require("../models/ChatRoom");
+const ChatRoom = require("../models/chatRoom"); 
 const userService = require("../services/userService");
 
 // 월별 체크리스트 조회 (UTC 기준)
@@ -15,27 +15,20 @@ async function getChecklistsByMonth(userId, year, month) {
     createdAt: { $gte: start, $lte: end },
   }).sort({ createdAt: 1 });
 
-  console.log("체크리스트 조회 : ", items);
-
   // roomName 채우기
   const roomIds = [...new Set(items.map(item => item.roomId.toString()))]; // 문자열 변환
-  console.log("roomIds : ", roomIds);
 
   const rooms = await ChatRoom.find({ _id: { $in: roomIds } }).select("name");
-  console.log("rooms 조회 : ", rooms);
 
   const roomMap = {};
   rooms.forEach(r => {
     roomMap[r._id.toString()] = r.name; 
   });
-  console.log("roomMap : ", roomMap);
 
   const itemsWithRoomName = items.map(item => ({
     ...item.toObject(),
     roomName: roomMap[item.roomId.toString()] || "룸 없음" 
   }));
-
-  console.log("itemsWithRoomName : ", itemsWithRoomName);
 
   return itemsWithRoomName;
 }
