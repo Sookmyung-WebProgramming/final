@@ -34,9 +34,14 @@ app.use("/", userRouter);
 
 
 // ===== MongoDB 연결 =====
-mongoose.connect("mongodb://127.0.0.1:27017/chat_service")
-  .then(() => console.log("✅ MongoDB 연결 성공"))
-  .catch((err) => console.error("❌ MongoDB 연결 실패 :", err));
+require("dotenv").config();
+
+mongoose.connect(process.env.MONGODB_URI_PROD, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+  .then(() => console.log("✅ MongoDB Atlas 연결 성공"))
+  .catch((err) => console.error("❌ MongoDB Atlas 연결 실패 :", err));
 
 
 // ===== 메시지 타입 판단 =====
