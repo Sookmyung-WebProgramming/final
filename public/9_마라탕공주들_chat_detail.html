@@ -39,6 +39,24 @@
 
 <!-- 메인 컨테이너 -->
 <div class="container">
+
+  <!-- 검색 결과 모달 -->
+  <div id="searchModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeSearchModal">&times;</span>
+      <h3>사용자 검색 결과</h3>
+      <ul id="modalSearchList"></ul>
+    </div>
+  </div>
+
+  <!-- 사용자 상세 모달 -->
+  <div id="userDetailModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeUserDetailModal">&times;</span>
+      <div id="userDetailContainer"></div>
+    </div>
+  </div>
+
   <div class="sidebar">
     <div class="widget-box">
       <a href="9_마라탕공주들_checklist.html" class="widget-item">📅 일정</a>
@@ -59,6 +77,9 @@
 
 <!-- 로그인 확인 스크립트 -->
 <script src="authCheck.js"></script>
+
+<!-- 상단 검색 JS -->
+<script src="search.js"></script>
 
 <!-- Socket.IO 클라이언트 -->
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>

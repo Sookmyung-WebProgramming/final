@@ -40,6 +40,24 @@
 
   <!-- 메인 콘텐츠 -->
   <div class="page-container">
+
+    <!-- 검색 결과 모달 -->
+    <div id="searchModal" class="modal">
+      <div class="modal-content">
+        <span class="close" id="closeSearchModal">&times;</span>
+        <h3>사용자 검색 결과</h3>
+        <ul id="modalSearchList"></ul>
+      </div>
+    </div>
+
+    <!-- 사용자 상세 모달 -->
+    <div id="userDetailModal" class="modal">
+      <div class="modal-content">
+        <span class="close" id="closeUserDetailModal">&times;</span>
+        <div id="userDetailContainer"></div>
+      </div>
+    </div>
+
     <!-- 왼쪽 : 달력 -->
     <section class="calendar-section">
       <!-- 달력 이동 버튼 -->
@@ -67,6 +85,9 @@
 
   <!-- 로그인 확인 스크립트 -->
   <script src="authCheck.js"></script>
+
+  <!-- 상단 검색 JS -->
+  <script src="search.js"></script>
 
   <!-- 전용 JS -->
   <script src="js/checklist.js"></script>
