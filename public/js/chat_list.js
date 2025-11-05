@@ -34,7 +34,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           </div>
           <span class="subBox">
             ${room.unreadCount ? `<span class="unread-count">${room.unreadCount}</span>` : ''}
-            <img class="icon ${room.favorite ? "" : "not"}" src="images/9_star_50dp_8050F2.svg" alt="">
             <span class="time">${room.updatedAt ? new Date(room.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}</span>
           </span>
         </a>

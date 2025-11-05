@@ -134,6 +134,10 @@ document.addEventListener("DOMContentLoaded", async () => {
           const target = messagesContainer.querySelector(`[data-created-at="${scrollTime}"]`);
           if (target) {
             target.scrollIntoView({ behavior: "smooth", block: "center" });
+            // 스크롤된 메시지 강조 효과 추가
+            target.classList.add("highlighted");
+            // 일정 시간 뒤에 자연스럽게 강조 해제
+            setTimeout(() => target.classList.remove("highlighted"), 3000);
           } else {
             // 특정 시간 메시지가 없으면 맨 아래로
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
