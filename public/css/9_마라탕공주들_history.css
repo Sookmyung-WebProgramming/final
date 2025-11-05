@@ -143,26 +143,6 @@
   object-fit: cover;
 }
 
-.fav-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background-color: rgba(255,255,255,0.9);
-  border: none;
-  border-radius: 50%;
-  width: 28px;
-  height: 28px;
-  font-size: 15px;
-  cursor: pointer;
-  color: #aaa;
-  transition: 0.3s;
-}
-
-.fav-btn.active,
-.fav-btn:hover {
-  color: #8050F2;
-}
-
 .media-meta {
   padding: 10px 12px;
 }

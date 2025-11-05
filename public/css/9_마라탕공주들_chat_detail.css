@@ -303,6 +303,11 @@ nav .menu a:hover {
 .message.me .time   { order: 3; }
 .message.me .bubble { order: 4; }
 
+.message.highlighted {
+  background-color: #fff8dc; /* 스크롤된 메시지는 노랑색 배경 */
+  border-left: 4px solid #ffcc00;
+  transition: background-color 1s ease;
+}
 
 .heart {
   cursor: pointer;

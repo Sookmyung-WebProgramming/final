@@ -9,11 +9,11 @@ body {
 
 .page-container {
   max-width: 1200px;
-  margin: 40px auto;
-  padding: 0 30px;
+  margin: 0 auto;
+  padding: 100px;
+  gap: 20px;
   display: grid;
   grid-template-columns: 1fr 1fr; /* 좌우 2단 */
-  gap: 40px;
   align-items: flex-start;
 }
 
