@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const User = require("../models/User"); 
 const userService = require("../services/userService");
 
 // ===== 로그인 =====
@@ -40,6 +41,69 @@ router.post("/register", async (req, res) => {
 // 로그인한 사용자 정보 가져오기 API 
 router.get("/api/me", userService.authenticate, (req, res) => {
   res.json({ success: true, userId: req.user.userId, name: req.user.name });
+});
+
+// 사용자 검색 API
+router.get("/api/users/search", userService.authenticate, async (req, res) => {
+  try {
+    const query = req.query.q?.trim();
+    if (!query) return res.json({ success: false, message: "검색어 누락" });
+
+    const me = await User.findOne({ userId: req.user?.userId }).populate("friends");
+    if (!me) return res.status(404).json({ success: false, message: "로그인 정보 불일치" });
+
+    const users = await User.find({
+      userId: { $regex: query, $options: "i" },
+      _id: { $ne: me._id },
+    }).lean();
+
+    const result = users.map((u) => ({
+      ...u,
+      isFriend: me.friends?.some((f) => f._id.toString() === u._id.toString()) || false,
+    }));
+
+    res.json({ success: true, users: result });
+  } catch (err) {
+    console.error("검색 오류 : ", err);
+    res.status(500).json({ success: false, message: "서버 오류" });
+  }
+});
+
+// 친구 추가 API 
+router.post("/api/friends/:id", userService.authenticate, async (req, res) => {
+  try {
+    const myUserIdStr = req.user?.userId; // 로그인된 사용자
+    const targetObjectId = req.params.id; // 상대방의 _id
+
+    if (!myUserIdStr || !targetObjectId)
+      return res.status(400).json({ success: false, message: "ID 누락" });
+
+    const me = await User.findOne({ userId: myUserIdStr });
+    if (!me)
+      return res.status(404).json({ success: false, message: "사용자 없음" });
+
+    // 자기 자신 방지
+    if (me._id.toString() === targetObjectId)
+      return res.status(400).json({ success: false, message: "자기 자신은 추가 불가" });
+
+    const target = await User.findById(targetObjectId);
+    if (!target)
+      return res.status(404).json({ success: false, message: "대상 사용자 없음" });
+
+    const alreadyFriends = me.friends?.some(f => f.toString() === target._id.toString());
+    if (alreadyFriends)
+      return res.status(400).json({ success: false, message: "이미 친구입니다." });
+
+    me.friends.push(target._id);
+    target.friends.push(me._id);
+    await me.save();
+    await target.save();
+
+    res.json({ success: true, message: "친구로 등록되었습니다!" });
+  } catch (err) {
+    console.error("친구 추가 오류:", err);
+    res.status(500).json({ success: false, message: "서버 오류" });
+  }
 });
 
 module.exports = router;
