@@ -29,7 +29,7 @@ npm -v
 
 ### 2️⃣ 프로젝트 클론
 ```bash
-git clone https://github.com/Sookmyung-WebProgramming 
+git clone https://github.com/Sookmyung-WebProgramming/final.git
 cd final 
 ``````
 
