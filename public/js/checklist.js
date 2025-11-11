@@ -316,7 +316,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         label.textContent = task.content;
 
         const badge = document.createElement("a");
-        badge.href = `9_마라탕공주들_chat_detail.html?roomId=${task.roomId}`;
+        badge.href = '9_마라탕공주들_chat_detail.html?roomId=' + encodeURIComponent(task.roomId) + '&time=' + encodeURIComponent(task.createdAt);
         badge.className = "chat-badge";
         badge.textContent = task.roomName || "룸 이름 없음";
 
