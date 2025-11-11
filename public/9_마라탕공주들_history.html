@@ -62,8 +62,16 @@
   <!-- 왼쪽 사이드바 -->
   <aside class="history-sidebar">
     <h3>채팅방별 보기</h3>
-    <ul class="chatroom-list">
-      <li class="active"><a href="#all">전체</a></li>
+    <div class="filter-item filter-item--compact">
+      <div class="dropdown" id="history-room-dropdown">
+        <button type="button" class="dropdown-toggle" id="history-room-toggle">
+          <span id="history-room-label">전체</span>
+        </button>
+        <ul class="dropdown-menu" id="history-room-menu" aria-hidden="true"></ul>
+      </div>
+    </div>
+    <ul class="chatroom-list" style="display:none;">
+      <li class="active" data-room="all"><a href="#">전체</a></li>
     </ul>
 
     <h3>필터</h3>
@@ -82,7 +90,6 @@
       <h2>보관함</h2>
       <div class="header-actions">
         <input type="text" class="search-media" placeholder="보관된 미디어 검색">
-        <button class="search-btn">검색</button>
       </div>
     </header>
 

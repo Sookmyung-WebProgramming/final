@@ -37,49 +37,87 @@
     </div>
   </nav>
 
+  <!-- 검색 결과 모달 -->
+  <div id="searchModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeSearchModal">&times;</span>
+      <h3>사용자 검색 결과</h3>
+      <ul id="modalSearchList"></ul>
+    </div>
+  </div>
+
+  <!-- 사용자 상세 모달 -->
+  <div id="userDetailModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeUserDetailModal">&times;</span>
+      <div id="userDetailContainer"></div>
+    </div>
+  </div>
+
   <!-- 메인 콘텐츠 -->
   <div class="page-container">
+    <!-- 1행: 필터 + 달력 -->
+    <div class="row-top">
+      <!-- 필터 섹션 -->
+      <div class="filter-section">
+        <h3>채팅방 필터</h3>
+        <div class="filter-options" id="filter-options">
+          <div class="filter-item filter-item--compact">
+            <div class="dropdown" id="room-dropdown">
+              <button type="button" class="dropdown-toggle" id="room-select-toggle">
+                <span id="room-select-label">전체</span>
+              </button>
+              <ul class="dropdown-menu" id="room-select-menu" aria-hidden="true"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    <!-- 검색 결과 모달 -->
-    <div id="searchModal" class="modal">
-      <div class="modal-content">
-        <span class="close" id="closeSearchModal">&times;</span>
-        <h3>사용자 검색 결과</h3>
-        <ul id="modalSearchList"></ul>
+      <!-- 달력 섹션 -->
+      <div class="calendar-section">
+        <div class="calendar">
+          <div class="calendar-header">
+            <button class="nav-button prev-month-btn" id="prev-month">‹</button>
+            <span class="month" id="calendar-header"></span>
+            <button class="nav-button next-month-btn" id="next-month">›</button>
+          </div>
+          <div class="calendar-grid" id="calendar-grid">
+            <div class="day-name">일</div>
+            <div class="day-name">월</div>
+            <div class="day-name">화</div>
+            <div class="day-name">수</div>
+            <div class="day-name">목</div>
+            <div class="day-name">금</div>
+            <div class="day-name">토</div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- 사용자 상세 모달 -->
-    <div id="userDetailModal" class="modal">
-      <div class="modal-content">
-        <span class="close" id="closeUserDetailModal">&times;</span>
-        <div id="userDetailContainer"></div>
+    <!-- 2행: 할 일 + 공지 -->
+    <div class="row-bottom">
+      <!-- 할 일 섹션 -->
+      <div class="tasks-section">
+        <h3>할 일</h3>
+        <div id="tasks-container">
+          <div class="content-group" id="tasks-content-group">
+            <div class="selected-date" id="selected-date"></div>
+            <ul class="task-list" id="task-list"></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 공지 섹션 -->
+      <div class="notice-section">
+        <h3>공지</h3>
+        <div id="notices-container">
+          <div class="content-group" id="notices-content-group">
+            <div class="selected-date" id="selected-date-notice"></div>
+            <ul class="notice-list" id="notice-list"></ul>
+          </div>
+        </div>
       </div>
     </div>
-
-    <!-- 왼쪽 : 달력 -->
-    <section class="calendar-section">
-      <!-- 달력 이동 버튼 -->
-      <div id="calendar-controls" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <button id="prev-month">← 이전 달</button>
-        <h2 id="calendar-header"></h2>
-        <button id="next-month">다음 달 →</button>
-      </div>
-      <!-- 달력 -->
-      <div id="calendar-dates" class="calendar-dates"></div>
-    </section>
-    <!-- 오른쪽 : 할 일 -->
-    <section class="tasks-section">
-      <h2>오늘의 할 일</h2>
-      <!-- 채팅방 필터  -->
-      <div style="margin-bottom:10px;">
-        <label for="room-filter">채팅방 필터 : </label>
-        <select id="room-filter">
-          <option value="all">전체 보기</option>
-        </select>
-      </div>
-      <div id="tasks-container"></div>
-    </section>
   </div>
 
   <!-- 로그인 확인 스크립트 -->

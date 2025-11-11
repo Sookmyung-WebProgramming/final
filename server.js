@@ -32,6 +32,12 @@ app.use("/", checklistRouter);
 app.use("/", historyRouter);
 app.use("/", userRouter);
 
+// ===== 정적 파일 서빙 =====
+// 루트 경로에서 index.html 제공
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "9_마라탕공주들_index.html"));
+});
+
 
 // ===== MongoDB 연결 =====
 require("dotenv").config();
