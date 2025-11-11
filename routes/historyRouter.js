@@ -1,15 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const Message = require("../models/Message");
+const userService = require("../services/userService");
 
 // 보관함용 메시지 조회 API
-router.get("/api/history", async (req, res) => {
+router.get("/api/history", userService.authenticate, async (req, res) => {
   try {
     const messages = await Message.find({
       type: { $in: ["image", "video", "file", "link"] }
     })
-      .populate("sender", "name profileImage")   
-      .populate("chatRoom", "name")              
+      .populate("sender", "name profileImage")
+      .populate("chatRoom", "name")
       .sort({ createdAt: -1 });
 
     const result = messages.map(msg => ({

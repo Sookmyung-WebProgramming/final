@@ -5,6 +5,7 @@ const checklistSchema = new mongoose.Schema({
   roomId: { type: mongoose.Schema.Types.ObjectId, ref: "ChatRoom", required: true },
   messageId: { type: mongoose.Schema.Types.ObjectId, ref: "Message" },
   content: { type: String, required: true },
+  checked: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
 });
 

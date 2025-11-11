@@ -1,163 +1,291 @@
 document.addEventListener("DOMContentLoaded", async () => {
+  // DOM 요소
   const grid = document.querySelector(".history-media-grid");
   const chatroomList = document.querySelector(".chatroom-list");
   const filterBox = document.querySelector(".filter-box");
-  const filterCheckboxes = filterBox.querySelectorAll("input[type='checkbox']");
   const searchInput = document.querySelector(".search-media");
-  const searchBtn = document.querySelector(".search-btn");
+  const userIdEl = document.getElementById("userId");
+  const roomDropdown = document.getElementById("history-room-dropdown");
+  const roomToggle = document.getElementById("history-room-toggle");
+  const roomLabel = document.getElementById("history-room-label");
+  const roomMenu = document.getElementById("history-room-menu");
 
-  // 로그인 확인
+  // 상태 관리
+  let allItems = [];
+  let selectedRoomId = "all";
+  let selectedTypes = ["사진", "동영상"];
+  let chatRooms = [];
+
+  // 타입 매핑
+  const typeMap = {
+    image: "사진",
+    video: "동영상",
+    file: "문서",
+    link: "링크"
+  };
+
+  // 초기화
   try {
     const meRes = await fetch("/api/me", { credentials: "include" });
     const meData = await meRes.json();
     if (!meData.success) throw new Error("로그인 정보 없음");
-    document.getElementById("userId").textContent = meData.name;
+    
+    userIdEl.textContent = meData.name;
+    await loadRooms();
+    await loadHistory();
   } catch (err) {
+    console.error("초기화 오류:", err);
     alert("로그인 후 이용 가능합니다.");
-    return;
   }
 
-  // ===== 보관함 데이터 불러오기 =====
-  let allItems = [];
-  try {
-    const res = await fetch("/api/history", { credentials: "include" });
-    const data = await res.json();
-    if (!data.success || !data.items) throw new Error("데이터 로드 실패");
+  // 채팅방 목록 로드 및 드롭다운 구성
+  async function loadRooms() {
+    try {
+      const res = await fetch("/api/chatrooms", { credentials: "include" });
+      const data = await res.json();
+      if (!data.success) throw new Error("채팅방 목록 로드 실패");
+      chatRooms = data.chatRooms || [];
 
-    allItems = data.items;
+      if (roomMenu && roomLabel && roomDropdown && roomToggle) {
+        roomMenu.innerHTML = "";
+        const addItem = (value, text) => {
+          const li = document.createElement("li");
+          li.className = "dropdown-item";
+          li.dataset.value = value;
+          li.textContent = text;
+          if ((selectedRoomId === "all" && value === "all") || selectedRoomId === value) {
+            li.classList.add("selected");
+          }
+          li.addEventListener("click", () => {
+            selectedRoomId = value;
+            roomLabel.textContent = text;
+            roomMenu.querySelectorAll(".dropdown-item").forEach(el => el.classList.remove("selected"));
+            li.classList.add("selected");
+            renderGrid();
+            roomDropdown.classList.remove("open");
+            roomMenu.setAttribute("aria-hidden", "true");
+          });
+          return li;
+        };
 
-    // 채팅방 목록 추출
-    const rooms = [
-      ...new Map(allItems.map(i => [i.chatRoomId, i.chatRoomName])).entries()
-    ];
+        roomMenu.appendChild(addItem("all", "전체"));
+        chatRooms.forEach(r => {
+          if (r && r._id && r.name) {
+            roomMenu.appendChild(addItem(String(r._id), r.name));
+          }
+        });
 
-    // 왼쪽 채팅방 목록 생성
+        roomLabel.textContent = "전체";
+
+        roomToggle.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const isOpen = roomDropdown.classList.toggle("open");
+          roomMenu.setAttribute("aria-hidden", isOpen ? "false" : "true");
+        });
+
+        document.addEventListener("click", (e) => {
+          if (!roomDropdown.contains(e.target)) {
+            roomDropdown.classList.remove("open");
+            roomMenu.setAttribute("aria-hidden", "true");
+          }
+        });
+      }
+    } catch (err) {
+      console.error("채팅방 목록 로드 오류:", err);
+    }
+  }
+
+  // 데이터 로드
+  async function loadHistory() {
+    try {
+      const res = await fetch("/api/history", { credentials: "include" });
+      const data = await res.json();
+      
+      if (!data.success || !data.items) throw new Error("데이터 로드 실패");
+
+      allItems = data.items;
+      // 드롭다운은 /api/chatrooms 기준으로 구성됨. 좌측 리스트는 숨김.
+      setupFilters();
+      renderGrid();
+    } catch (err) {
+      console.error("보관함 데이터 로드 실패:", err);
+      showError("보관함 데이터를 불러오지 못했습니다.");
+    }
+  }
+
+  // 채팅방 목록 업데이트
+  function updateChatroomList() {
+    const roomMap = new Map();
+    allItems.forEach(item => {
+      if (item.chatRoomId && item.chatRoomName) {
+        roomMap.set(item.chatRoomId.toString(), item.chatRoomName);
+      }
+    });
+
     chatroomList.innerHTML = `
-      <li class="active" data-room="all"><a href="#">전체보기</a></li>
-      ${rooms
+      <li class="active" data-room="all"><a href="#">전체</a></li>
+      ${Array.from(roomMap.entries())
         .map(([id, name]) => `<li data-room="${id}"><a href="#">${name}</a></li>`)
         .join("")}
     `;
 
-    // 기본 표시 (전체, 모든 타입)
-    applyFilters();
-
-  } catch (err) {
-    console.error("보관함 데이터 로드 실패:", err);
-    grid.innerHTML = `<p style="color:red;">보관함 데이터를 불러오지 못했습니다.</p>`;
+    chatroomList.querySelectorAll("li").forEach(li => {
+      li.addEventListener("click", (e) => {
+        e.preventDefault();
+        chatroomList.querySelectorAll("li").forEach(l => l.classList.remove("active"));
+        li.classList.add("active");
+        selectedRoomId = li.dataset.room || "all";
+        renderGrid();
+      });
+    });
   }
 
-  // ===== 채팅방 클릭 시 필터링 =====
-  chatroomList.addEventListener("click", (e) => {
-    const li = e.target.closest("li");
-    if (!li) return;
-
-    chatroomList.querySelectorAll("li").forEach(li => li.classList.remove("active"));
-    li.classList.add("active");
-
-    applyFilters();
-  });
-
-  // ===== 체크박스 필터 적용 =====
-  filterCheckboxes.forEach(cb => {
-    cb.addEventListener("change", () => {
-      applyFilters();
-    });
-  });
-
-  // ===== 검색 버튼 클릭 또는 Enter =====
-  searchBtn.addEventListener("click", applyFilters);
-  searchInput.addEventListener("keyup", (e) => {
-    if (e.key === "Enter") applyFilters();
-  });
-
-  // ===== 클릭 시 채팅 시점으로 이동 =====
-  grid.addEventListener("click", (e) => {
-    const meta = e.target.closest(".media-meta");
-    if (meta) {
-      const roomId = meta.dataset.roomId;
-      const createdAt = meta.dataset.createdAt;
-      if (roomId && createdAt) {
-        window.location.href = `/9_마라탕공주들_chat_detail.html?roomId=${encodeURIComponent(roomId)}&time=${encodeURIComponent(createdAt)}`;
+  // 필터 설정
+  function setupFilters() {
+    const checkboxes = filterBox.querySelectorAll("input[type='checkbox']");
+    
+    checkboxes.forEach(checkbox => {
+      const label = checkbox.nextSibling.textContent.trim();
+      if (label === "사진" || label === "동영상") {
+        checkbox.checked = true;
       }
-    }
-  });
 
-  // ===== 필터 + 검색 적용 함수 =====
-  function applyFilters() {
-    // 선택된 채팅방
-    const activeRoomLi = chatroomList.querySelector("li.active");
-    const selectedRoomId = activeRoomLi?.dataset.room || "all";
+      checkbox.addEventListener("change", () => {
+        selectedTypes = Array.from(checkboxes)
+          .filter(cb => cb.checked)
+          .map(cb => cb.nextSibling.textContent.trim());
+        renderGrid();
+      });
+    });
+  }
 
-    // 선택된 타입
-    const selectedTypes = Array.from(filterCheckboxes)
-      .filter(cb => cb.checked)
-      .map(cb => cb.nextSibling.textContent.trim().toLowerCase());
+  // 검색 (실시간)
+  searchInput.addEventListener("input", renderGrid);
 
-    // 검색어
-    const keyword = searchInput.value.trim().toLowerCase();
-
+  // 필터링 및 렌더링
+  function renderGrid() {
     let filtered = allItems;
 
+    // 채팅방 필터
     if (selectedRoomId !== "all") {
-      filtered = filtered.filter(i => i.chatRoomId === selectedRoomId);
-    }
-
-    if (selectedTypes.length > 0) {
-      filtered = filtered.filter(i => {
-        if (i.type === "image" && selectedTypes.includes("사진")) return true;
-        if (i.type === "video" && selectedTypes.includes("동영상")) return true;
-        if (i.type === "file" && selectedTypes.includes("문서")) return true;
-        if (i.type === "link" && selectedTypes.includes("링크")) return true;
-        return false;
-      });
-    }
-
-    if (keyword) {
-      filtered = filtered.filter(i =>
-        (i.senderName || "").toLowerCase().includes(keyword) ||
-        (i.content || "").toLowerCase().includes(keyword) ||
-        (i.chatRoomName || "").toLowerCase().includes(keyword)
+      filtered = filtered.filter(item => 
+        item.chatRoomId?.toString() === selectedRoomId
       );
     }
 
-    renderGrid(filtered);
-  }
-
-  // ===== 렌더 함수 =====
-  function renderGrid(items) {
-    grid.innerHTML = "";
-
-    if (!items.length) {
-      grid.innerHTML = `<p style="color:gray;">해당 조건의 항목이 없습니다.</p>`;
-      return;
+    // 타입 필터
+    if (selectedTypes.length > 0) {
+      filtered = filtered.filter(item => 
+        selectedTypes.includes(typeMap[item.type])
+      );
     }
 
-    items.forEach(item => {
-      const date = new Date(item.createdAt);
-      const formatted = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")} • ${String(date.getHours()).padStart(2,"0")}:${String(date.getMinutes()).padStart(2,"0")}`;
+    // 검색어 필터
+    const keyword = searchInput.value.trim().toLowerCase();
+    if (keyword) {
+      filtered = filtered.filter(item =>
+        (item.senderName || "").toLowerCase().includes(keyword) ||
+        (item.content || "").toLowerCase().includes(keyword) ||
+        (item.chatRoomName || "").toLowerCase().includes(keyword)
+      );
+    }
 
-      let thumbHtml = "";
-      if (item.type === "image") thumbHtml = `<img src="${item.content}" alt="이미지" />`;
-      else if (item.type === "video") thumbHtml = `<video src="${item.content}" muted preload="metadata"></video>`;
-      else thumbHtml = `<img src="../images/9_logo.svg" alt="파일/링크" />`;
-
-      const html = `
-        <div class="media-item">
-          <a class="media-thumb" href="${item.content}" target="_blank" rel="noopener noreferrer">${thumbHtml}</a>
-          <div class="media-meta"
-               data-room-id="${item.chatRoomId}"
-               data-message-id="${item.id}"
-               data-created-at="${item.createdAt}">
-            <p class="media-title">
-              [${item.chatRoomName}] ${item.senderName || "알 수 없음"} : ${item.content}
-            </p>
-            <p class="media-date">${formatted}</p>
-          </div>
-        </div>
-      `;
-      grid.insertAdjacentHTML("beforeend", html);
-    });
+    // 렌더링
+    grid.innerHTML = "";
+    
+    if (filtered.length === 0) {
+      grid.innerHTML = getEmptyStateHTML();
+    } else {
+      filtered.forEach(item => {
+        grid.appendChild(createMediaItem(item));
+      });
+    }
   }
 
+  // 빈 상태 HTML
+  function getEmptyStateHTML() {
+    return `
+      <div class="empty-state">
+        <div class="empty-state-icon">📦</div>
+        <p class="empty-state-message">해당 조건의 항목이 없습니다.</p>
+        <p class="empty-state-submessage">다른 검색어나 필터를 시도해보세요.</p>
+      </div>
+    `;
+  }
+
+  // 미디어 아이템 생성
+  function createMediaItem(item) {
+    const div = document.createElement("div");
+    div.className = "media-item";
+    div.dataset.roomId = item.chatRoomId;
+    div.dataset.createdAt = item.createdAt;
+
+    // 썸네일
+    const thumbDiv = document.createElement("div");
+    thumbDiv.className = "media-thumb";
+    thumbDiv.style.cursor = "pointer";
+    thumbDiv.addEventListener("click", () => window.open(item.content, "_blank"));
+    
+    if (item.type === "image") {
+      const img = document.createElement("img");
+      img.src = item.content;
+      img.alt = "이미지";
+      img.onerror = () => { img.src = "images/9_logo.svg"; };
+      thumbDiv.appendChild(img);
+    } else if (item.type === "video") {
+      const video = document.createElement("video");
+      video.src = item.content;
+      video.muted = true;
+      video.preload = "metadata";
+      thumbDiv.appendChild(video);
+    } else {
+      const img = document.createElement("img");
+      img.src = "images/9_logo.svg";
+      img.alt = "파일/링크";
+      thumbDiv.appendChild(img);
+    }
+
+    // 메타 정보
+    const metaDiv = document.createElement("div");
+    metaDiv.className = "media-meta";
+    metaDiv.style.cursor = "pointer";
+    
+    const titleP = document.createElement("p");
+    titleP.className = "media-title";
+    titleP.textContent = `[${item.chatRoomName || "알 수 없음"}] ${item.senderName || "익명"}`;
+    
+    const dateP = document.createElement("p");
+    dateP.className = "media-date";
+    dateP.textContent = formatDate(item.createdAt);
+    
+    metaDiv.appendChild(titleP);
+    metaDiv.appendChild(dateP);
+    metaDiv.addEventListener("click", () => {
+      if (item.chatRoomId && item.createdAt) {
+        window.location.href = `/9_마라탕공주들_chat_detail.html?roomId=${item.chatRoomId}&time=${encodeURIComponent(item.createdAt)}`;
+      }
+    });
+
+    div.appendChild(thumbDiv);
+    div.appendChild(metaDiv);
+    
+    return div;
+  }
+
+  // 날짜 포맷팅
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    
+    return `${year}-${month}-${day} • ${hours}:${minutes}`;
+  }
+
+  // 에러 표시
+  function showError(message) {
+    grid.innerHTML = `<p style="color:red; padding: 20px;">${message}</p>`;
+  }
 });
