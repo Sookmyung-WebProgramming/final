@@ -16,7 +16,7 @@
   </div>
   <ul class="menu">
     <li><a href="9_마라탕공주들_index.html">홈</a></li>
-    <li><a href="9_마라탕공주들_chat_list.html">채팅</a></li>
+    <li><a href="9_마라탕공주들_chat_list.html" class="active">채팅</a></li>
     <li><a href="9_마라탕공주들_checklist.html">체크리스트</a></li>
     <li><a href="9_마라탕공주들_history.html">보관함</a></li>
     <li><a href="9_마라탕공주들_setting.html">설정</a></li>
@@ -60,10 +60,20 @@
     <div class="widget-box">
       <a href="9_마라탕공주들_checklist.html" class="widget-item">📅 일정</a>
       <a href="9_마라탕공주들_history.html" class="widget-item">📸 추억</a>
+      <input type="checkbox" id="memo-toggle" hidden>
+      <label for="memo-toggle" class="widget-item">📝 메모</label>
+      <div class="memo-box">
+        <textarea placeholder="메모를 작성하세요..."></textarea>
+      </div>
     </div>
   </div>
 
-  <div class="chat-section">
+  <div class="chat-window">
+    <!-- 채팅 헤더 추가 -->
+    <div class="chat-header">
+      <h2 id="roomName"></h2>
+      <div class="member-count" id="memberCount"></div>
+    </div>
     <div class="chat-messages"></div>
     <div class="chat-input">
       <label for="file-upload" class="attach-btn">＋</label>
