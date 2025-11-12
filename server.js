@@ -4,17 +4,24 @@ const cookieParser = require("cookie-parser");
 const path = require("path");
 const http = require("http");
 const { Server } = require("socket.io");
+require("dotenv").config();
 
+// ===== 앱/서버 설정 =====
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
 
+// ===== Socket.IO 설정 =====
+const io = new Server(server, {
+  cors: { origin: "*" } // 모든 도메인 허용
+});
+
+// ===== 모델 =====
 const User = require("./models/User");
 const ChatMessage = require("./models/Message");
 const ChatRoom = require("./models/chatRoom");
 const ChatRoomUserStatus = require("./models/ChatRoomUserStatus");
 
-// 미들웨어
+// ===== 미들웨어 =====
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
@@ -33,15 +40,11 @@ app.use("/", historyRouter);
 app.use("/", userRouter);
 
 // ===== 정적 파일 서빙 =====
-// 루트 경로에서 index.html 제공
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "9_마라탕공주들_index.html"));
 });
 
-
 // ===== MongoDB 연결 =====
-require("dotenv").config();
-
 mongoose.connect(process.env.MONGODB_URI_PROD, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -49,12 +52,11 @@ mongoose.connect(process.env.MONGODB_URI_PROD, {
   .then(() => console.log("✅ MongoDB Atlas 연결 성공"))
   .catch((err) => console.error("❌ MongoDB Atlas 연결 실패 :", err));
 
-
 // ===== 메시지 타입 판단 =====
 function determineMessageType(content) {
   if (/\.jpg$|\.png$|\.jpeg$/i.test(content)) return "image";
   if (/\.mp4$|\.mov$|\.avi$/i.test(content)) return "video";
-  if (/\.xlsx$|\.pdf$|\.docx$/i.test(content)) return "file";  
+  if (/\.xlsx$|\.pdf$|\.docx$/i.test(content)) return "file";
   if (/^https?:\/\//i.test(content)) return "link";
   return "text";
 }
@@ -64,14 +66,13 @@ function convertToSampleLink(content) {
   switch(type) {
     case "image": return "https://news.samsungdisplay.com/wp-content/uploads/2018/08/8.jpg";
     case "video": return "https://youtu.be/YTgazB4a0uY?si=aVUdwWmPiPwnoZ9D";
-    case "file":  return "http://javakorean.com/wp2/wp-content/uploads/2014/11/2014-HTML5-%EC%9D%B8%ED%84%B0%EB%84%B7%EB%B3%B4%EC%B6%A9%ED%95%99%EC%8A%B5%EC%9E%90%EB%A3%8C-01%EA%B0%95.pdf";
+    case "file":  return "http://javakorean.com/wp2/wp-content/uploads/2014/11/2014-HTML5-%EC%9D%B8%ED%84%B0%EB%84%B4%EB%B3%B4%EC%B6%A9%ED%95%99%EC%8A%B5%EC%9E%90%EB%A3%8C-01%EA%B0%95.pdf";
     case "link":  return content;
     case "text":  return content;
   }
 }
 
-
-// ===== Socket.IO =====
+// ===== Socket.IO 처리 =====
 const roomMembers = new Map(); // key: roomId, value: Set(userIds)
 
 io.on("connection", (socket) => {
@@ -88,7 +89,6 @@ io.on("connection", (socket) => {
     socket.join(roomId);
     console.log(`${socket.userId}가 방 ${roomId}에 입장`);
 
-    // 참여자 목록에 추가
     if (!roomMembers.has(roomId)) roomMembers.set(roomId, new Set());
     roomMembers.get(roomId).add(socket.userId);
 
@@ -111,7 +111,6 @@ io.on("connection", (socket) => {
     }
   });
 
-  // 방 퇴장 처리
   socket.on("leaveRoom", (roomId) => {
     if (socket.userId && roomMembers.has(roomId)) {
       roomMembers.get(roomId).delete(socket.userId);
@@ -120,7 +119,6 @@ io.on("connection", (socket) => {
     socket.leave(roomId);
   });
 
-  // 메시지 전송
   socket.on("chatMessage", async (data) => {
     const { roomId, sender, content } = data;
     if (!sender || !roomId) return;
@@ -149,7 +147,6 @@ io.on("connection", (socket) => {
         updatedAt: new Date(),
       });
 
-      // 현재 방에 실제로 있는 사람만 lastReadAt 갱신
       const members = roomMembers.get(roomId);
       if (members && members.size > 0) {
         for (const memberUserId of members) {
@@ -175,7 +172,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    // disconnect 시 모든 방에서 제거
     for (const [roomId, members] of roomMembers.entries()) {
       members.delete(socket.userId);
     }
@@ -183,6 +179,11 @@ io.on("connection", (socket) => {
   });
 });
 
-
 // ===== 서버 실행 =====
-server.listen(3000, () => console.log("서버 실행 중 : http://localhost:3000"));
+const PORT = 3000;
+const HOST = "0.0.0.0";
+const IP = "172.20.57.49";
+
+server.listen(PORT, HOST, () => {
+  console.log(`서버 실행 중 : http://${IP}:${PORT}`);
+});

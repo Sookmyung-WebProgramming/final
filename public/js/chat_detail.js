@@ -4,10 +4,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     const meData = await meRes.json();
     if (!meData.success) throw new Error("로그인 정보 없음");
 
-    const userId = meData.userId;
+    const userId = meData.user?.userId;
     const userName = meData.user?.name || meData.name;
+
+    // 상단 이름 업데이트
     document.getElementById("userId").textContent = userName;
 
+    // 상단 프로필 이미지 업데이트
+    const navProfileImg = document.querySelector(".nav-right .profile-img");
+    if (navProfileImg) navProfileImg.src = meData.user?.profileImg || "images/9_profile.jpg";
+    
     const params = new URLSearchParams(window.location.search);
     const roomId = params.get("roomId");
     const scrollTime = params.get("time");
