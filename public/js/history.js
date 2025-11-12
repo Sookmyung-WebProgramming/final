@@ -30,7 +30,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     const meData = await meRes.json();
     if (!meData.success) throw new Error("로그인 정보 없음");
     
-    userIdEl.textContent = meData.name;
+    // 사용자 이름 표시
+    userIdEl.textContent = meData.user?.name || "익명";
+
+    // 상단 프로필 이미지 표시
+    const navProfileImg = document.querySelector(".nav-right .profile-img");
+    if (navProfileImg) {
+      navProfileImg.src = meData.user?.profileImg || "images/9_person_50dp_FFFFFF.svg";
+    }
     await loadRooms();
     await loadHistory();
   } catch (err) {

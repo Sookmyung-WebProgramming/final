@@ -28,7 +28,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     const meRes = await fetch("/api/me", { credentials: "include" });
     const meData = await meRes.json();
     if (!meData.success) throw new Error("로그인 정보 없음");
-    userIdEl.textContent = meData.name;
+
+    // 이름 표시
+    const userName = meData.user?.name || meData.name || "사용자";
+    userIdEl.textContent = userName;
+
+    // 상단 프로필 이미지 표시
+    const navProfileImg = document.querySelector(".nav-right .profile-img");
+    if (navProfileImg) navProfileImg.src = meData.user?.profileImg || "images/9_profile.jpg";
 
     // 오늘 날짜로 초기화
     const today = new Date();

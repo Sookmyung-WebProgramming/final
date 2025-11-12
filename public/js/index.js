@@ -1,10 +1,25 @@
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    // 로그인한 사용자 정보
+    // 로그인한 사용자 정보 가져오기
     const meRes = await fetch("/api/me", { credentials: "include" });
     const meData = await meRes.json();
     if (!meData.success) throw new Error("로그인 정보 없음");
-    document.getElementById("userId").textContent = meData.name;
+
+    const user = meData.user;
+
+    // 상단 네비게이션 프로필
+    document.getElementById("userId").textContent = user?.name || "익명";
+    const navProfileImg = document.querySelector(".nav-right .profile-img");
+    if (navProfileImg) navProfileImg.src = user?.profileImg || "images/9_profile.jpg";
+
+    // 좌측 박스 프로필
+    const profileNameEl = document.querySelector(".profile-name");
+    const profileStatusEl = document.querySelector(".profile-status");
+    const profileImgEl = document.querySelector(".profile-img-wrap img");
+
+    if (profileNameEl) profileNameEl.textContent = user?.name || "익명";
+    if (profileStatusEl) profileStatusEl.textContent = user?.profileMessage || "";
+    if (profileImgEl) profileImgEl.src = user?.profileImg || "images/9_people.png";
 
     // 오늘의 일정
     const today = new Date();
