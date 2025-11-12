@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const meData = await meRes.json();
     if (!meData.success) throw new Error("로그인 정보 없음");
 
-    const userId = meData.userId;
+    const userId = meData.user?.userId;
     const userName = meData.user?.name || meData.name;
 
     // 상단 이름 업데이트
