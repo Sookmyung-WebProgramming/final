@@ -21,6 +21,12 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// ===== 로그아웃 =====
+router.post("/api/logout", (req, res) => {
+  res.clearCookie("token");
+  res.json({ success: true });
+});
+
 // ===== 회원가입 =====
 router.post("/register", async (req, res) => {
   const { userId, password, name } = req.body;
@@ -39,8 +45,24 @@ router.post("/register", async (req, res) => {
 });
 
 // 로그인한 사용자 정보 가져오기 API 
-router.get("/api/me", userService.authenticate, (req, res) => {
-  res.json({ success: true, userId: req.user.userId, name: req.user.name });
+router.get("/api/me", userService.authenticate, async (req, res) => {
+  try {
+
+    const user = await User.findOne({ userId: req.user.userId })
+      .select("-password") // 비밀번호 제외
+      .populate("friends", "userId name profileImg");
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: "사용자를 찾을 수 없습니다." });
+    }
+
+    res.json({
+      success: true,
+      user, // user 필드 안에 데이터 담김
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "서버 오류가 발생했습니다." });
+  }
 });
 
 // 사용자 검색 API
@@ -102,6 +124,57 @@ router.post("/api/friends/:id", userService.authenticate, async (req, res) => {
     res.json({ success: true, message: "친구로 등록되었습니다!" });
   } catch (err) {
     console.error("친구 추가 오류:", err);
+    res.status(500).json({ success: false, message: "서버 오류" });
+  }
+});
+
+// 친구 목록 불러오기 API 
+router.get("/api/friends", userService.authenticate, async (req, res) => {
+  const me = await User.findOne({ userId: req.user.userId }).populate("friends");
+  const allUsers = await User.find({ _id: { $ne: me._id } });
+
+  const friends = me.friends.map(f => ({
+    _id: f._id,
+    userId: f.userId,
+    name: f.name,
+    profileImg: f.profileImg
+  }));
+
+  const nonFriends = allUsers
+    .filter(u => !me.friends.some(f => f._id.equals(u._id)))
+    .map(u => ({
+      _id: u._id,
+      userId: u.userId,
+      name: u.name,
+      profileImg: u.profileImg
+    }));
+
+  res.json({ success: true, friends, nonFriends });
+});
+
+// 친구 삭제 API 
+router.delete("/api/friends/:friendId", userService.authenticate, async (req, res) => {
+  const { friendId } = req.params;
+  const user = await User.findOne({ userId: req.user.userId });
+  user.friends = user.friends.filter(f => f.toString() !== friendId);
+  await user.save();
+  res.json({ success: true });
+});
+
+// 프로필 수정 API 
+router.put("/api/profile", userService.authenticate, async (req, res) => {
+  try {
+    const { profileImg, profileMessage } = req.body;
+
+    const user = await User.findOne({ userId: req.user.userId });
+    if (!user) return res.status(404).json({ success: false, message: "사용자 없음" });
+
+    if (profileImg) user.profileImg = profileImg;
+    if (profileMessage !== undefined) user.profileMessage = profileMessage;
+
+    await user.save();
+    res.json({ success: true, message: "프로필이 수정되었습니다.", user });
+  } catch (err) {
     res.status(500).json({ success: false, message: "서버 오류" });
   }
 });

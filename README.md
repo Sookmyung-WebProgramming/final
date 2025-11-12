@@ -48,19 +48,29 @@ MONGO_URI=mongodb+srv://<유저이름>:<비밀번호>@<클러스터주소>/<DB�
 
 ### 5️⃣ 서버 실행
 ```bash
+// 1. cmd 에 ipconfig 입력.
+``````
+<img width="300" height="250" alt="image" src="https://github.com/user-attachments/assets/8d2492fd-acfa-4d50-99b1-4e7d4d8e588d" />
+
+```bash
+// 2. server.js 의 마지막 부분에서 IP 를 위 IP로 교체
+const IP = "172.20.57.49"; 
+
+// 3. 터미널에서 실행
 npm start
 ``````
 
 ### 정상 실행 시 출력 예시
 ```bash
 ✅ MongoDB 연결 성공
-🚀 Server running on http://localhost:3000
+🚀 Server running on http://172.20.57.49:3000
 ``````
 
 ## 🧪 테스트
 브라우저 또는 Postman에서 확인
 ```bash
-http://localhost:3000/9_%EB%A7%88%EB%9D%BC%ED%83%95%EA%B3%B5%EC%A3%BC%EB%93%A4_login.html
+// 172.20.57.49 대신 본인의 IP로 대체!!
+http://172.20.57.49:3000/9_%EB%A7%88%EB%9D%BC%ED%83%95%EA%B3%B5%EC%A3%BC%EB%93%A4_login.html
 ``````
 
 ## 📚 참고 자료

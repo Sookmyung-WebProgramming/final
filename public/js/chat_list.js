@@ -5,7 +5,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!meRes.ok) throw new Error(`HTTP error! status: ${meRes.status}`);
     const meData = await meRes.json();
     if (!meData.success) throw new Error("로그인 정보 없음");
-    document.getElementById("userId").textContent = meData.name;
+
+    // 상단 이름 업데이트
+    const userName = meData.user?.name || meData.name || "사용자Id";
+    document.getElementById("userId").textContent = userName;
+
+    // 상단 프로필 이미지 업데이트
+    const navProfileImg = document.querySelector(".nav-right .profile-img");
+    if (navProfileImg) navProfileImg.src = meData.user?.profileImg || "images/9_profile.jpg";
 
     // 서버에서 채팅 목록 가져오기
     const res = await fetch("/api/chatrooms", { credentials: "include" });
@@ -21,7 +28,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     data.chatRooms.forEach(room => {
       // 프로필 이미지
       const profileLi = document.createElement("li");
-      profileLi.innerHTML = `<img class="mini-profile" src="${room.profileImg || 'images/9_person_50dp_FFFFFF.svg'}" alt="">`;
+      profileLi.innerHTML = `<img class="mini-profile" src="${room.profileImg || 'images/9_profile.jpg'}" alt="">`;
       chatProfiles.appendChild(profileLi);
 
       // 채팅 내용

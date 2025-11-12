@@ -1,172 +1,235 @@
-/* ---------------- 레이아웃 ---------------- */
+/* ---------------- 기본 ---------------- */
+body {
+    font-family: "Pretendard", "Noto Sans KR", sans-serif;
+    background-color: #f8f9fc;
+    color: #222;
+    margin: 0;
+}
+
+/* ---------------- 메인 ---------------- */
 .settings-container {
-  max-width: 1300px;
-  margin: 40px auto;
-  padding: 0 20px;
+    max-width: 1100px;
+    margin: 50px auto;
+    padding: 0 20px;
 }
 
-.settings-container > h1 {
-  font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 30px;
-  color: #000000;
+.settings-container h1 {
+    font-size: 32px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 40px;
+    color: #222;
 }
 
-/* ---------------- 카드 그리드 ---------------- */
+/* ---------------- 2x2 카드 그리드 ---------------- */
 .cards-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-auto-rows: minmax(200px, auto);
-  gap: 20px;
-}
-
-.setting-card {
-  margin-bottom: 0;
-}
-
-/* 반응형 */
-@media (max-width: 900px) {
-  .cards-grid {
-    grid-template-columns: 1fr;
-  }
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
 }
 
 /* ---------------- 카드 ---------------- */
 .setting-card {
-  background-color: #fff;
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  padding: 20px 24px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    padding: 28px;
+    transition: 0.3s;
+}
+
+.setting-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 .setting-card h2 {
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 16px;
-  color: #000000;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 16px;
 }
 
-/* ---------------- 설정 아이템 ---------------- */
+/* ---------------- 버튼 통일 ---------------- */
+.action-btn {
+    background: #8050F2;
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.action-btn:hover {
+    opacity: 0.85;
+}
+
+/* ---------------- 프로필 수정 ---------------- */
+.profile-edit-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.profile-preview img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid #8050F2;
+    object-fit: cover;
+}
+
+.form-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group textarea {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    resize: none;
+}
+
+.btn-row {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+/* ---------------- 알림 ---------------- */
 .setting-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 0;
-  border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid #eee;
 }
 
 .setting-item:last-child {
-  border-bottom: none;
-}
-
-.item-info {
-  max-width: 70%;
+    border-bottom: none;
 }
 
 .item-title {
-  font-size: 20px;
-  font-weight: 600;
-  color: #222;
+    font-size: 18px;
+    font-weight: 600;
+    color: #222;
 }
 
 .item-desc {
-  font-size: 18px;
-  color: #555;
-  margin-top: 4px;
+    font-size: 16px;
+    color: #555;
+    margin-top: 4px;
 }
 
-/* ---------------- 버튼 ---------------- */
-.setting-btn {
-  background-color: #8050F2; 
-  border: none;
-  color: #fff;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.2s;
-}
-
-.setting-btn:hover {
-  opacity: 0.8;
-}
-
-/* ---------------- 토글 스위치 ---------------- */
 .toggle {
-  position: relative;
-  display: inline-block;
-  width: 44px;
-  height: 24px;
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 24px;
 }
 
 .toggle input {
-  opacity: 0;
-  width: 0;
-  height: 0;
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
 
 .slider {
-  position: absolute;
-  cursor: pointer;
-  inset: 0;
-  background-color: #ccc;
-  border-radius: 24px;
-  transition: .3s;
+    position: absolute;
+    inset: 0;
+    background: #ccc;
+    border-radius: 24px;
+    transition: 0.3s;
 }
 
 .slider:before {
-  position: absolute;
-  content: "";
-  height: 18px;
-  width: 18px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  border-radius: 50%;
-  transition: .3s;
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    left: 3px;
+    bottom: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: 0.3s;
 }
 
 .toggle input:checked + .slider {
-  background-color: #8050F2; 
+    background: #8050F2;
 }
 
 .toggle input:checked + .slider:before {
-  transform: translateX(20px);
+    transform: translateX(22px);
 }
 
-/* ---------------- 선택 박스 ---------------- */
-.theme-select {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  font-size: 18px;
-  color: #333;
-  background-color: #fff;
+/* ---------------- 친구 목록 ---------------- */
+.friend-list-card {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
-/* ---------------- 로그아웃 ---------------- */
-.logout-section {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 200px; 
-  text-align: center;
-  gap: 16px; 
+.friend-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 240px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    border-radius: 8px;
 }
 
-.logout-btn {
-  background-color: #8050F2; 
-  color: #fff;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 18px;
-  font-weight: 600;
-  transition: 0.3s;
+.friend-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border-bottom: 1px solid #eee;
 }
 
-.logout-btn:hover {
-  opacity: 0.85;
+.friend-list li:last-child {
+    border-bottom: none;
+}
+
+.friend-list li img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* 친구 정보 + 버튼 */
+.friend-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.friend-list li button.action-btn {
+    background: #8050F2;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.friend-list li button.action-btn:hover {
+    opacity: 0.85;
 }

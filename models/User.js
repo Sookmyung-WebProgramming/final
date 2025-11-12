@@ -5,6 +5,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true }, 
   name: { type: String, required: true },
   profileImg: { type: String },
+  profileMessage: { type: String },
   friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }]
 });
 
