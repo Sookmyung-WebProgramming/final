@@ -42,6 +42,10 @@ app.get("/", (req, res) => {
 // ===== MongoDB 연결 =====
 require("dotenv").config();
 
+const io = new Server(server, {
+  cors: { origin: "*" } // 모든 도메인 허용 (같은 와이파이 내 접속용)
+}); 
+
 mongoose.connect(process.env.MONGODB_URI_PROD, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -185,4 +189,10 @@ io.on("connection", (socket) => {
 
 
 // ===== 서버 실행 =====
-server.listen(3000, () => console.log("서버 실행 중 : http://localhost:3000"));
+const PORT = 3000;
+const HOST = "0.0.0.0"; // 모든 IP에서 접근 허용
+const IP = "172.20.57.49"; // 로컬 네트워크 IP
+
+server.listen(PORT, HOST, () => {
+  console.log(`서버 실행 중 : http://${IP}:${PORT}`);
+});
