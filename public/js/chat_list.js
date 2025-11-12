@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     data.chatRooms.forEach(room => {
       // 프로필 이미지
       const profileLi = document.createElement("li");
-      profileLi.innerHTML = `<img class="mini-profile" src="${room.profileImg || 'images/9_person_50dp_FFFFFF.svg'}" alt="">`;
+      profileLi.innerHTML = `<img class="mini-profile" src="${room.profileImg || 'images/9_profile.jpg'}" alt="">`;
       chatProfiles.appendChild(profileLi);
 
       // 채팅 내용
