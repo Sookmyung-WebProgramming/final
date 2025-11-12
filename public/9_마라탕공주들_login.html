@@ -5,16 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>로그인 / 회원가입</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="css/9_마라탕공주들_login.css">
 </head>
-<body>
-  <div class="container">
+<body class="login-body">
+  <div class="login-main-container">
 
     <!-- 로그인 -->
     <div class="login-container">
       <h2>로그인</h2>
       <form id="loginForm">
-        <input type="text" name="userId" placeholder="아이디" required />
-        <input type="password" name="password" placeholder="비밀번호" required />
+        <input type="text" name="userId" placeholder="아이디" required /> <br>
+        <input type="password" name="password" placeholder="비밀번호" required /> <br>
         <button type="submit">로그인</button>
       </form>
       <p id="loginMessage"></p>
@@ -24,9 +25,9 @@
     <div class="register-container">
       <h2>회원가입</h2>
       <form id="registerForm">
-        <input type="text" name="userId" placeholder="아이디" required />
-        <input type="password" name="password" placeholder="비밀번호" required />
-        <input type="text" name="name" placeholder="이름" required />
+        <input type="text" name="userId" placeholder="아이디" required /> <br>
+        <input type="password" name="password" placeholder="비밀번호" required /> <br>
+        <input type="text" name="name" placeholder="이름" required /> <br>
         <button type="submit">회원가입</button>
       </form>
       <p id="registerMessage"></p>
