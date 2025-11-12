@@ -33,19 +33,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!roomId) throw new Error("roomId가 URL에 없음");
 
     const messagesContainer = document.querySelector(".chat-messages");
-        // 하트 토글
+    // 하트 토글
     messagesContainer.addEventListener("click", (e) => {
       const el = e.target;
       if (!el.classList.contains("heart-icon")) return;
 
       const liked = el.getAttribute("data-liked") === "true";
-      el.setAttribute("data-liked", String(!liked));
-      el.src = liked ? "images/9_vacantheart.png" : "images/9_filledheart.png";
-      
-      // 메시지별 개인 좋아요 상태 로컬 저장
+      const newLiked = !liked;
+      el.setAttribute("data-liked", String(newLiked));
+      el.src = newLiked ? "images/9_filledheart.png" : "images/9_vacantheart.png";
+
+      // 채팅방별, 메시지별, 사용자별로 저장
       const msgId = el.getAttribute("data-msg-id");
       const key = `like:${roomId}:${msgId}:${userId}`;
-      try { localStorage.setItem(key, !liked ? "1" : "0"); } catch {}
+      try {
+        localStorage.setItem(key, newLiked ? "1" : "0");
+      } catch {}
     });
     let lastMessageDate = null;
 
@@ -104,6 +107,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         </div>
       `;
       messagesContainer.appendChild(div);
+
+      // 하트 상태 복원
+      const heartIcon = div.querySelector(".heart-icon");
+      if (heartIcon) {
+        const key = `like:${roomId}:${msg._id}:${userId}`;
+        const checked = localStorage.getItem(key) === "1";
+        heartIcon.setAttribute("data-liked", String(checked));
+        heartIcon.src = checked ? "images/9_filledheart.png" : "images/9_vacantheart.png";
+      }
 
       // 체크리스트 이벤트
       const btn = div.querySelector(".checklist-btn");
