@@ -16,10 +16,37 @@ document.addEventListener("DOMContentLoaded", async () => {
     
     const params = new URLSearchParams(window.location.search);
     const roomId = params.get("roomId");
+    // 방 정보 먼저 불러와 헤더 채우기
+    try {
+      const roomRes = await fetch(`/api/chatrooms/${encodeURIComponent(roomId)}`, { credentials: "include" });
+      const roomData = await roomRes.json();
+      if (roomData.success && roomData.room) {
+        const { name, members } = roomData.room;
+        document.getElementById("roomName").textContent = name || "채팅방";
+        document.getElementById("memberCount").textContent = (members?.length ?? 1);
+      }
+    } catch (e) {
+      console.warn("방 정보 API 실패", e);
+    }
+
     const scrollTime = params.get("time");
     if (!roomId) throw new Error("roomId가 URL에 없음");
 
     const messagesContainer = document.querySelector(".chat-messages");
+        // 하트 토글
+    messagesContainer.addEventListener("click", (e) => {
+      const el = e.target;
+      if (!el.classList.contains("heart-icon")) return;
+
+      const liked = el.getAttribute("data-liked") === "true";
+      el.setAttribute("data-liked", String(!liked));
+      el.src = liked ? "images/9_vacantheart.png" : "images/9_filledheart.png";
+      
+      // 메시지별 개인 좋아요 상태 로컬 저장
+      const msgId = el.getAttribute("data-msg-id");
+      const key = `like:${roomId}:${msgId}:${userId}`;
+      try { localStorage.setItem(key, !liked ? "1" : "0"); } catch {}
+    });
     let lastMessageDate = null;
 
     function addMessageToDOM(msg) {
@@ -65,6 +92,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           <div class="bubble-row">
             <div class="bubble">${contentHTML}</div>
             <div class="meta">
+              <img src="images/9_vacantheart.png" class="heart-icon" alt="좋아요" data-liked="false" data-msg-id="${msg._id}">
               <span class="time">${localTimeStr}</span>
               <button class="checklist-btn" style="margin-left:5px;">📋 할 일</button>
             </div>
@@ -116,6 +144,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const data = await res.json();
     if (data.success) {
       data.messages.forEach(addMessageToDOM);
+      
       setTimeout(() => {
         if (scrollTime) {
           const target = messagesContainer.querySelector(`[data-created-at="${scrollTime}"]`);

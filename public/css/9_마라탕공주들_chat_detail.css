@@ -33,7 +33,6 @@ nav .logo img {
   flex-shrink: 0;
 }
 
-
 nav .menu {
   display: flex;
   list-style: none;
@@ -45,12 +44,18 @@ nav .menu {
 
 nav .menu a {
   text-decoration: none;
-  color: #111;
-  font-weight: 600;
+  color: #333;
+  font-weight: 500;
   font-size: 16px;
 }
+
 nav .menu a:hover {
-  color: #8050F2;
+  color: #fff; 
+  font-weight: 500;
+  padding: 12px 15px;
+  transition: all 0.3s ease;           
+  background-color: #8050F2; 
+  border-radius: 5px;     
 }
 
 /* 검색창 */
@@ -106,6 +111,28 @@ nav .menu a:hover {
   background-color: #8050F2;
   transform: scale(1.03);
   color:#fff
+}
+
+.memo-box {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.memo-box textarea {
+  width: 100%;
+  height: 80px;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #8050F2;
+  resize: none;
+  outline: none;
+  box-sizing: border-box; 
+}
+
+#memo-toggle:checked + label + .memo-box {
+  max-height: 200px;
 }
 
 .chat-window {
@@ -175,7 +202,6 @@ nav .menu a:hover {
   overflow-y: auto;
 }
 
-
 .message {
   display: flex;
   align-items: flex-start;
@@ -192,9 +218,7 @@ nav .menu a:hover {
   height: 48px;
   border-radius: 50%;
   object-fit: cover;
-  margin-right: 10px;
 }
-
 
 .chat-name {
   font-weight: 700;
@@ -252,16 +276,7 @@ nav .menu a:hover {
 
 .message.me .bubble {
   background: #EDE8FF;
-  color: #111;
-  border-radius: 12px;
-  padding: 10px 14px;
-  display: inline-block;
-  max-width: 38ch;
-  line-height: 1.35;
-  white-space: pre-line;
-  word-break: keep-all;
 }
-
 
 .message.me .chat-img {
   width: 48px;
@@ -272,36 +287,31 @@ nav .menu a:hover {
 
 .bubble-row {
   display: flex;
-  align-items: baseline;
+  align-items:flex-end;
   gap: 8px;
 }
 
-.bubble-row input[type="checkbox"] {
-  display: none;
-}
-
 .bubble-row .meta {
-  display: contents;
+  display: flex;
+  flex-direction: row;   
   align-items: center;
   gap: 8px;
   font-size: 15px;
   color: #000;
 }
 
+.message.friend .bubble-row { flex-direction: row; }
+.message.me .bubble-row { flex-direction: row-reverse; }
+
+.bubble-row .meta .time { order: 1; }
+.bubble-row .meta .todo { order: 2; }
+
+.message.me .bubble-row .meta .todo{ order:1; }
+.message.me .bubble-row .meta .time{ order:2; }
+
 .time {
   margin-left: 1px;
 }
-
-
-.message.friend .bubble { order: 1; }
-.message.friend .time   { order: 2; }
-.message.friend .reply  { order: 3; }
-.message.friend .heart  { order: 4; }
-
-.message.me .heart  { order: 1; }
-.message.me .reply  { order: 2; }
-.message.me .time   { order: 3; }
-.message.me .bubble { order: 4; }
 
 .message.highlighted {
   background-color: #fff8dc; /* 스크롤된 메시지는 노랑색 배경 */
@@ -309,23 +319,7 @@ nav .menu a:hover {
   transition: background-color 1s ease;
 }
 
-.heart {
-  cursor: pointer;
-  font-size: 22px;
-  transition: transform 0.2s ease, filter 0.2s ease;
-}
-
-input[type="checkbox"]:checked + .heart {
-  color: #8050F2;
-  filter: drop-shadow(0 0 4px rgba(255, 75, 75, 0.6));
-  transform: scale(1.2);
-}
-
 .widget-item input[type="checkbox"] {
-  display: none;
-}
-
-#heart1 {
   display: none;
 }
 
@@ -385,8 +379,68 @@ input[type="checkbox"]:checked + .heart {
   background-color: #8050F2;
 }
 
+.bubble--text { max-width: 38ch; }
+
+.bubble--file { max-width: 32ch; }
+
+.bubble--image {
+  padding: 6px;
+  max-width: min(70vw, 520px);
+}
+
+.bubble--video {
+  padding: 6px;
+  max-width: min(70vw, 640px);
+}
+
+/* 공통 미디어 태그 */
+.chat-media {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  object-fit: contain;
+}
+
+.video-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;   
+  border-radius: 10px;
+  overflow: hidden;
+}
+.video-wrap iframe,
+.video-wrap video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+img.chat-media { max-height: 60vh; }
+
+.message.me .bubble--image,
+.message.me .bubble--video {
+  background: #EDE8FF;
+}
+.message.friend .bubble--image,
+.message.friend .bubble--video {
+  background: #F4F2F1;
+}
+
+.heart-icon{
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  vertical-align: middle;
+  transition: transform 0.2s ease;
+}
+.heart-icon:hover{ transform: scale(1.08); }
+
 @media (max-width: 900px) {
   .chat-window {
     width: 100%;
   }
+  .bubble--image { max-width: 92vw; }
+  .bubble--video { max-width: 92vw; }
 }
