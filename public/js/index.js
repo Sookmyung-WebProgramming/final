@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // 오늘 일정 표시 
     const titleEl = document.createElement("h3");
-    titleEl.textContent = `${month}월 ${date}일 할 일`;
+    titleEl.textContent = `${year}년 ${month}월 ${date}일`;
     todoListEl.appendChild(titleEl);
 
     if (todayList.length === 0) {
@@ -59,9 +59,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         const label = document.createElement("label");
         label.textContent = task.content;
 
-        const timeSpan = document.createElement("span");
-        const created = new Date(task.createdAt);
-        timeSpan.textContent = `(${created.getHours()}시 ${created.getMinutes()}분)`;
 
         const roomBtn = document.createElement("button");
         roomBtn.textContent = task.roomName || "룸 이름 없음";
@@ -73,7 +70,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         div.appendChild(checkbox);
         div.appendChild(label);
-        div.appendChild(timeSpan);
         div.appendChild(roomBtn);
         todoListEl.appendChild(div);
       });
