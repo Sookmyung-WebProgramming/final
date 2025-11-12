@@ -110,7 +110,7 @@
   max-width: 100%;
   background-color: #fff;
   border-radius: 12px;
-  padding-left: 30px;
+  padding-left: 28px;
   box-shadow: 0 3px 6px rgba(0,0,0,0.1);
   gap:0px;
   box-sizing: border-box;
@@ -130,8 +130,8 @@
 .todo-list {
   list-style: none;
   padding: 0;
-  margin-top:18px;
-  margin-left: 8px;
+  margin-top: 8px;
+  margin-left: 0;
   
 }
 
@@ -219,23 +219,30 @@ input[type="checkbox"]:checked {
   font-size: 16px;
   margin-bottom: 20px;
   color: #333;
-  padding:12px 16px;
+  padding:12px 12px;
   border: 1.5px solid #ECEFF1;
   border-radius: 48px;
   display: inline-block;
   width: fit-content;
   align-items: center;
+  line-height: 1;
 
 }
 
 .title-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background-color: #8050F2;
   color: #fff;
   font-weight: bold;
   border-radius: 50%;
-  padding: 5px 5px;
+  width: 22px;  
+  height: 22px;
+  margin-left: 8px;
   font-size: 12px;
   margin-left: 8px;
+  line-height: 1;
 }
 
 .main-content h2 {
@@ -331,10 +338,65 @@ input[type="checkbox"]:checked {
 
 .sidebar > h3 {
   display: block;
-  padding-bottom: 16px;    
+  padding-bottom: 8px;    
   margin-top: 5px; 
 }
 
+.room-btn {
+  font-size: 12px;
+  color: #fff;
+  background-color: #8050F2;
+  padding: 4px 10px;
+  white-space: nowrap;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  
+}
+
+.room-btn:hover {
+  background-color: #6633cc;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background-color: #fafafa;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  gap: 8px;
+  box-sizing: border-box;
+
+}
+
+.task-item label {
+  flex: 1;
+  font-size: 16px;
+  color: #333;
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.selected-date {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  margin-top:4px;
+  margin-bottom: 16px;
+  letter-spacing: -0.2px;
+}
+
+.todo-list h3 {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+  font-weight: normal;
+}
 
 
 /* 홈 반응형 */
