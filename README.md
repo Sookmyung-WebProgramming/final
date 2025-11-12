@@ -63,7 +63,7 @@ npm start
 ### 정상 실행 시 출력 예시
 ```bash
 ✅ MongoDB 연결 성공
-🚀 Server running on http://localhost:3000
+🚀 Server running on http://172.20.57.49:3000
 ``````
 
 ## 🧪 테스트
