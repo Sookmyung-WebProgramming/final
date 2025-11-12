@@ -303,11 +303,16 @@ nav .menu a:hover {
 .message.friend .bubble-row { flex-direction: row; }
 .message.me .bubble-row { flex-direction: row-reverse; }
 
-.bubble-row .meta .time { order: 1; }
-.bubble-row .meta .todo { order: 2; }
+/* 기본(상대방): 버블 → 시간(1) → 할 일(2) → 하트(3) */
+.message.friend .bubble-row .meta .time               { order: 1; }
+.message.friend .bubble-row .meta :is(.todo,.checklist-btn){ order: 2; }
+.message.friend .bubble-row .meta .heart-icon         { order: 3; }
 
-.message.me .bubble-row .meta .todo{ order:1; }
-.message.me .bubble-row .meta .time{ order:2; }
+/* 나(me): (메타가 왼쪽) 하트(1) → 할 일(2) → 시간(3)  */
+.message.me .bubble-row .meta .heart-icon             { order: 1; }
+.message.me .bubble-row .meta :is(.todo,.checklist-btn){ order: 2; }
+.message.me .bubble-row .meta .time                   { order: 3; }
+
 
 .time {
   margin-left: 1px;
