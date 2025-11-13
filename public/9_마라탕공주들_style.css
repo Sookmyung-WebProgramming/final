@@ -36,7 +36,7 @@ nav {
 }
 
 .logo img {
-  width: 40%;
+  width: 100%;
   min-width: 100px;
   margin-left: 100px;
 }
@@ -78,14 +78,10 @@ nav {
   border: 1px solid #ccc;
 }
 
-.search-container button {
-  padding: 7px 14px;
-  border: none;
-  background-color: #8050F2;
-  color: #fff;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.search-container input:focus {
+  border: 1px solid #8050f2;
+  box-shadow: 0 0 0 3px rgba(128, 80, 242, 0.1);
+  outline: none;
 }
 
 .search-container button:hover {
