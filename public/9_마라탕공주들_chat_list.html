@@ -49,7 +49,7 @@
 </div>
 
 <!-- 메인 컨테이너 -->
-<div class="container">
+<div class="chat-list-container">
 
   <!-- 검색 결과 모달 -->
   <div id="searchModal" class="modal">
@@ -71,25 +71,23 @@
   <aside class="chat-list-sidebar">
     <h3>채팅 필터</h3>
     <ul class="chatroom-list">
-      <li><a href="#" class="active">전체</a></li>
-      <li><a href="#">안읽음</a></li>
+      <li>
+        <input type="radio" id="allChat" name="1" value="allChat" checked>
+        <label for="allChat">전체</label>
+      </li>
+      <li>
+        <input type="radio" id="notReadChat" name="1" value="notReadChat">
+        <label for="notReadChat">안읽음</label>
+      </li>
     </ul>
   </aside>
 
   <div class="main-content chat-list">
-    <h2 style="display:flex; justify-content:space-between; align-items:center;">
+    <h3>
       채팅방 목록
       <button id="createRoomBtn">채팅방 만들기</button>
-    </h2>
-    <hr>
-    <div class="subBox">
-      <div class="list-img">
-        <ul class="unread-chat-list" id="chatProfiles"></ul>
-      </div>
-      <div class="list-chat">
-        <ul class="unread-chat-list" id="chatList"></ul>
-      </div>
-    </div>
+    </h3>
+    <ul class="unread-chat-list" id="chatList"></ul>
   </div>
 </div>
 
