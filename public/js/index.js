@@ -55,6 +55,22 @@ document.addEventListener("DOMContentLoaded", async () => {
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.checked = task.checked;
+        //할 일 체크시 체크리스트랑 연동+ 체크 유지 기능 
+        checkbox.addEventListener("change", async () => {
+          try {
+            await fetch(`/api/checklist/item/${task._id}`, {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+              body: JSON.stringify({ checked: checkbox.checked }),
+            });
+          
+          } catch (err) {
+            console.error(err);
+            
+            checkbox.checked = !checkbox.checked;
+          }
+        });
 
         const label = document.createElement("label");
         label.textContent = task.content;
