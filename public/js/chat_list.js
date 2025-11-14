@@ -1,3 +1,4 @@
+// 페이지 로드
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     // 로그인 사용자 정보
@@ -20,33 +21,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     const data = await res.json();
     if (!data.success) throw new Error("채팅 목록 불러오기 실패");
 
-    const chatList = document.getElementById("chatList");
-    const chatProfiles = document.getElementById("chatProfiles");
-    chatList.innerHTML = "";
-    chatProfiles.innerHTML = "";
+    // 가져온 전체 목록을 'allChatRooms' 변수에 저장
+    allChatRooms = data.chatRooms;
 
-    data.chatRooms.forEach(room => {
-      // 프로필 이미지
-      const profileLi = document.createElement("li");
-      profileLi.innerHTML = `<img class="mini-profile" src="${room.profileImg || 'images/9_profile.jpg'}" alt="">`;
-      chatProfiles.appendChild(profileLi);
-
-      // 채팅 내용
-      const li = document.createElement("li");
-      li.innerHTML = `
-        <a href="9_마라탕공주들_chat_detail.html?roomId=${encodeURIComponent(room._id)}">
-          <div class="chat-info">
-            <span class="chat-name">${room.name}</span><br>
-            <span class="chat-preview">${room.lastSender || ''}: ${room.lastMessage || ''}</span>
-          </div>
-          <span class="subBox">
-            ${room.unreadCount ? `<span class="unread-count">${room.unreadCount}</span>` : ''}
-            <span class="time">${room.updatedAt ? new Date(room.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}</span>
-          </span>
-        </a>
-      `;
-      chatList.appendChild(li);
-    });
+    // 분리된 'renderChatList' 함수를 호출해 전체 목록을 처음 출력 
+    renderChatList(allChatRooms);
 
   } catch (err) {
     console.error("채팅 목록 불러오기 실패:", err);
@@ -56,6 +35,75 @@ document.addEventListener("DOMContentLoaded", async () => {
     chatProfiles.innerHTML = `<li></li>`;
   }
 });
+
+// ===================== 채팅방 필터 =======================
+// 전체 채팅방 목록을 저장
+let allChatRooms = [];
+
+// 채팅 목록을 화면에 그리는 함수
+function renderChatList(roomsToDisplay) {
+  const chatList = document.getElementById("chatList");
+
+  // 목록을 새로 그리기 전에 기존 내용 비우기 
+  chatList.innerHTML = "";
+
+  // 표시할 채팅방이 없는 경우
+  if (!roomsToDisplay || roomsToDisplay.length === 0) {
+    chatList.innerHTML = `<li><span class="todo-empty">표시할 채팅방이 없습니다.</span></li>`;
+    return; // 함수 종료
+  }
+
+  // 전달받은 배열(roomsToDisplay)을 기준으로 화면 출력 
+  roomsToDisplay.forEach(room => {
+
+    const li = document.createElement("li");
+    // 프로필 이미지, 채팅 내용
+    li.innerHTML = `
+      <a href="9_마라탕공주들_chat_detail.html?roomId=${encodeURIComponent(room._id)}">
+      
+      <img class="mini-profile" src="${room.profileImg || 'images/9_profile.jpg'}" alt="">
+      
+      <div class="chat-info">
+          <span class="chat-name">${room.name}</span><br>
+          <span class="chat-preview">${room.lastSender || ''}: ${room.lastMessage || ''}</span>
+        </div>
+        <span class="subBox">
+          ${room.unreadCount ? `<span class="unread-count">${room.unreadCount}</span>` : ''}
+          <span class="time">${room.updatedAt ? new Date(room.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}</span>
+        </span>
+      </a>
+    `;
+    chatList.appendChild(li);
+  });
+}
+
+// 채팅방 필터 
+async function handleChatChange(event) {
+  const selectedValue = event.target.value;
+  console.log('채팅방 필터 변경:', selectedValue);
+  
+  // selectedValue 값에 따라 분기 처리
+  if (selectedValue === 'allChat') {
+    // '전체'를 선택하면, 저장해둔 'allChatRooms' 전체를 출력 
+    renderChatList(allChatRooms);
+
+  } else if (selectedValue === 'notReadChat') {
+    // '안읽음'을 선택하면, 저장해둔 'allChatRooms' 배열을 filter() 메소드로 필터링
+    const unreadRooms = allChatRooms.filter(room => room.unreadCount > 0);
+    
+    // 필터링된 'unreadRooms' 목록만 출력 
+    renderChatList(unreadRooms);
+  }
+}
+
+// 모든 채팅방 라디오 버튼을 가져오기 
+const radioButtons = document.querySelectorAll('.chatroom-list input[type="radio"]');
+
+// 각 라디오 버튼(radio)에 'change' 이벤트가 발생하면 handleChatChange 함수를 실행하도록 연결(attach)
+radioButtons.forEach(radio => {
+  radio.addEventListener('change', handleChatChange);
+});
+
 
 // ===================== 친구 선택 모달 =====================
 const createRoomBtn = document.getElementById("createRoomBtn");

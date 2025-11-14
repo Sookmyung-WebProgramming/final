@@ -1,25 +1,36 @@
-.container {
+.chat-list-container {
+  display: flex;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
-  gap: 20px;
+  padding: 25px;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+.chat-list-container h3 {
+  font-size: 24px;
+  margin: 0 0 10px 0;
+}
+
+.main-content.chat-list h3 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border-bottom: 1px solid #eeeeee;
+  padding-bottom: 15px;
 }
 
 .chat-list-sidebar {
-  width: 200px;
+  width: 180px;
   height: fit-content;
   display: flex;
   flex-direction: column;
   gap: 20px;
   background-color: #ffffff;
   border-radius: 15px;
-  padding: 25px 20px;
+  padding: 25px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-
-.chat-list-sidebar li:hover {
-  opacity: 0.8;
-  transition: 0.7s;
 }
 
 .chatroom-list {
@@ -28,7 +39,7 @@
   margin: 0;
 }
 
-.chatroom-list li a {
+.chatroom-list label {
   display: block;
   padding: 10px 12px;
   border-radius: 8px;
@@ -38,45 +49,65 @@
   text-align: center;
   margin-bottom: 5px;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
-.chatroom-list li a:hover,
-.chatroom-list li a.active {
+.chatroom-list input[type=radio]+label {
+  background-color: #fafafa;
+  color: #80828f;
+}
+
+.chatroom-list li label:hover,
+.chatroom-list input[type=radio]:checked+label {
   background-color: #8050F2;
   color: #fff;
   font-weight: bold;
+}
+
+.chatroom-list li input[type="radio"] {
+  display: none;
 }
 
 .main-content {
   flex: 1;
 }
 
+.chat-list .unread-chat-list li {
+  list-style: none;
+  margin-bottom: 10px; /* 채팅방 목록 사이의 간격 */
+}
+
+.chat-list .unread-chat-list li a {
+  display: flex;
+  align-items: center; 
+  gap: 15px; /* 프로필 사진과 채팅 내용 사이의 간격 */
+  padding: 12px;
+  border-radius: 10px;
+  background-color: #fafafa;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.chat-list .unread-chat-list li a:hover {
+  background-color: #f1f1f1;
+}
+
 .mini-profile {
   width: 50px;
   height: 50px;
   list-style: none;
-  margin: 7px 0;
-  margin-bottom: 4px;
   border-radius: 50%;
 }
 
 .chat-info {
-  width: 60px;
   flex-grow: 1;
 }
 
 .subBox {
   display: flex;
-  padding: 10px;
-}
-
-.list-img {
-  width: 50px;
-  margin-right: 8px;
-}
-
-.list-chat {
-  width: 100%;
+  align-items: center;
+  white-space: nowrap;
+  gap: 8px;
 }
 
 .chat-name {
@@ -96,25 +127,28 @@
   opacity: 0.2;
 }
 
+.unread-count {
+  margin-bottom: 6px;
+}
+
 .time {
   font-size: small;
-  margin-top: 5px;
-  margin-left: 25px;
-  white-space: nowrap;
+  margin: 0 10px;
 }
 
 #createRoomBtn {
-  font-weight: bold;
+  background: #8050F2;
   color: #fff;
-  background-color: #8050F2;
-  padding:5px 15px;
-  margin-right: 10px;
   border: none;
-  border-radius: 5px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
 }
 #createRoomBtn:hover {
-  opacity: 0.8;
-  transition: 0.7s;
+  opacity: 0.85;
 }
 
 /* ====================== 모달 ====================== */
@@ -133,46 +167,88 @@
 .modal-content {
   background-color: #fff;
   margin: 100px auto;
-  padding: 20px;
-  border-radius: 10px;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12 px rgb(0,0,0,0.1);
   width: 400px;
   position: relative;
 }
 
 .modal-content h3 {
   margin-top: 0;
+  font-size: 22px;
+  text-align: center;
+  margin-bottom: 25px;
 }
 
 .modal-content .close {
   position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 20px;
+  top: 15px;
+  right: 20px;
+  font-size: 28px;
+  color: #aaa;
   cursor: pointer;
+  transition: color 0.3s;
+}
+.modal-content .close:hover {
+  color: #333;
+}
+
+#chatRoomName {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+.friendList {
+  max-height: 200px;  /* 친구가 많으면 스크롤 */
+  overflow-y: auto;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 5px;
+  margin-bottom: 30px;
 }
 
 .friend-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 5px;
-  border-bottom: 1px solid #eee;
+  display: block;
   cursor: pointer;
 }
 
-.friend-item.selected {
-  background-color: #f0f0ff;
+.friend-item label {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+.friend-item label:hover {
+  background-color: #f9f9f9;
 }
 
-.friend-item button {
-  background-color: #8050F2;
+.friend-item input[type="checkbox"]:checked + label {
+  background-color: #f0f0ff;
+  font-weight: 600;
+  color: #8050F2;
+}
+
+#createChatRoomConfirm {
+  background: #8050F2;
   color: #fff;
   border: none;
-  padding: 3px 8px;
-  border-radius: 5px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
   cursor: pointer;
+  transition: 0.3s;
+  
+  width: 100%; 
+  display: block;
+  margin-top: 30px;
 }
-
-.friend-item button:disabled {
-  background-color: #ccc;
-  cursor: default;
+#createChatRoomConfirm:hover {
+  opacity: 0.85;
 }
