@@ -146,12 +146,10 @@ nav {
   border: 1px solid #ece6ff;
   border-radius: 20px;
   cursor: pointer;
-  transition: transform 0.25s ease;
 }
 
 .nav-right:hover {
   border: 1px solid #8050F2;
-  transform: translateY(-4px);
   box-shadow: 0 0 0 3px rgba(128, 80, 242, 0.1);
 }
 
