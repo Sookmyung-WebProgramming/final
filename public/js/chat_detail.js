@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const roomData = await roomRes.json();
       if (roomData.success && roomData.room) {
         const { name, members } = roomData.room;
-        document.getElementById("roomName").textContent = name || "채팅방";
+        document.getElementById("roomName").innerText = name || "채팅방";
         document.getElementById("memberCount").textContent = (members?.length ?? 1);
       }
     } catch (e) {
@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const input = div.querySelector(".checklist-form input");
 
       btn.addEventListener("click", () => {
-        form.style.display = form.style.display === "none" ? "block" : "none";
+        form.style.display = form.style.display === "none" ? "flex" : "none";
       });
 
       submitBtn.addEventListener("click", async () => {

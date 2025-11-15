@@ -153,18 +153,10 @@ nav .menu a:hover {
   margin-bottom: 10px;
   padding-bottom: 8px;
   display: flex;
+  justify-content: center; 
   align-items: center;
-  gap: 10px; 
+  gap: 10px;
   padding: 10px 14px;
-}
-
-.chat-header::before {
-  content: "";
-  display: inline-block;
-  width: 48px;
-  height: 48px;
-  background-color: #EDE8FF; 
-  border-radius: 15px; 
 }
 
 .chat-header h2 {
@@ -173,17 +165,16 @@ nav .menu a:hover {
   margin: 0;
 }
 
+.chat-header .header-emoji {
+  font-size: 1.1em;
+  line-height: 1;
+}
+
 .chat-header .member-count {
   display: flex;
   align-items: center;
-  gap: 4px;
   font-size: 14px;
   color: #67727C;
-}
-
-.chat-header .member-count::before {
-  content: "👤";
-  font-size: 12px;
 }
 
 .chat-date {
@@ -229,14 +220,44 @@ nav .menu a:hover {
   margin: 0 0 6px 2px;
 }
 
-.checklist-form input {
-  width: 70%;
-  padding: 2px 5px;
-  font-size: 0.9em;
+/* ===== '할 일' 입력창 ===== */
+.checklist-form {
+  /* js가 display: 'flex' */
+  gap: 6px;
+  align-items: center;
+
+  margin-top: 10px; 
+  padding: 6px;
+  border-radius: 8px;
+  border: 1px solid #eee;
 }
+
+.checklist-form input {
+  flex: 1;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 5px 8px;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+}
+.checklist-form input[type="text"]:focus {
+  border-color: #8050F2;
+}
+
 .checklist-form button {
-  padding: 2px 5px;
-  font-size: 0.9em;
+  background-color: #8050F2; 
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.checklist-form button:hover {
+  background-color: #6a40d9;
 }
 
 
@@ -318,11 +339,6 @@ nav .menu a:hover {
 .message.me .bubble-row .meta :is(.todo,.checklist-btn){ order: 1; }
 .message.me .bubble-row .meta .heart-icon             { order: 2; }
 .message.me .bubble-row .meta .time                   { order: 3; }
-
-
-/* .time {
-  margin-left: 1px;
-} */
 
 .message.highlighted {
   background-color: #fff8dc; /* 스크롤된 메시지는 노랑색 배경 */

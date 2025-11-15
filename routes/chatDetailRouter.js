@@ -5,6 +5,7 @@ const Message = require("../models/Message");
 const User = require("../models/User");
 const Checklist = require("../models/Checklist");
 const userService = require("../services/userService");
+const ChatRoom = require("../models/ChatRoom");
 
 // 특정 채팅방 메시지 가져오기 API
 router.get("/api/chatrooms/:roomId/messages", userService.authenticate, async (req, res) => {
@@ -31,6 +32,25 @@ router.get("/api/chatrooms/:roomId/messages", userService.authenticate, async (r
     res.json({ success: true, messages});
   } catch (err) {
     console.error("❌ 메시지 불러오기 오류:", err);
+    res.status(500).json({ success: false, message: "서버 오류" });
+  }
+});
+
+// 특정 채팅방 '정보' 가져오기 API
+router.get("/api/chatrooms/:roomId", userService.authenticate, async (req, res) => {
+  try {
+    const roomId = req.params.roomId;
+    const room = await ChatRoom.findById(roomId).populate("members", "name userId"); // 멤버 정보도 같이 가져오기
+
+    if (!room) {
+      return res.status(404).json({ success: false, message: "방을 찾을 수 없음" });
+    }
+
+    // 'name'과 'members'가 포함된 room 객체 전송
+    res.json({ success: true, room: room });
+
+  } catch (err) {
+    console.error("❌ 채팅방 정보 불러오기 오류:", err);
     res.status(500).json({ success: false, message: "서버 오류" });
   }
 });
