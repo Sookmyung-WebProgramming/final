@@ -61,12 +61,14 @@
   resize: none;
   outline: none;
   box-sizing: border-box; 
+  font-family: 'Pretendard', sans-serif;
 }
 
 #memo-toggle:checked + label + .memo-box {
   max-height: 200px;
 }
 
+/* ================== 채팅 영역 =================== */
 .chat-window {
   flex: 1;
   max-width: 900px;
@@ -151,7 +153,7 @@
   margin: 0 0 6px 2px;
 }
 
-/* ===== '할 일' 입력창 ===== */
+/* ================= '할 일' 입력창 ================ */
 .checklist-form {
   /* js가 display: 'flex' */
   gap: 6px;
@@ -351,7 +353,7 @@
   max-width: min(70vw, 640px);
 }
 
-/* 공통 미디어 태그 */
+/* ================== 공통 미디어 태그 ================ */
 .chat-media {
   display: block;
   width: 100%;

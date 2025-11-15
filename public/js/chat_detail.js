@@ -32,6 +32,28 @@ document.addEventListener("DOMContentLoaded", async () => {
     const scrollTime = params.get("time");
     if (!roomId) throw new Error("roomId가 URL에 없음");
 
+    // 메모 저장 
+    try {
+      const memoTextarea = document.querySelector(".memo-box textarea");
+      
+      // 채팅방, 사용자 별 전용 저장 키
+      const memoKey = `memo:${roomId}:${userId}`;
+
+      // 페이지 로드 시, 저장된 메모를 불러오기 
+      const savedMemo = localStorage.getItem(memoKey);
+      if (savedMemo) {
+        memoTextarea.value = savedMemo;
+      }
+
+      // 사용자가 메모장에 타이핑할 때마다 저장
+      memoTextarea.addEventListener("input", () => {
+        localStorage.setItem(memoKey, memoTextarea.value);
+      });
+
+    } catch (e) {
+      console.warn("메모 기능 초기화 실패", e);
+    }
+
     const messagesContainer = document.querySelector(".chat-messages");
     // 하트 토글
     messagesContainer.addEventListener("click", (e) => {
