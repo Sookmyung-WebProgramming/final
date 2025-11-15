@@ -10,7 +10,7 @@
 body {
   margin: 0;
   font-family: 'Pretendard', sans-serif;
-  background-color: #f5f5f5;
+  background-color: #f8f9fc;
   padding-top: 80px;
 }
 
@@ -36,16 +36,16 @@ nav {
 }
 
 .logo img {
-  width: 40%;
+  width: 50%;
   min-width: 100px;
-  margin-left: 100px;
+  margin-left: 80px;
 }
 
 .menu {
   display: flex;
-  gap: 70px;
+  gap: 48px;
   list-style: none;
-  margin: 0;
+  margin-left: 48px;
   padding: 0;
 }
 
@@ -73,19 +73,18 @@ nav {
 }
 
 .search-container input[type="text"] {
-  padding: 7px 12px;
+  font-size: 14px;
+  padding: 10px;
+  width: 200px;
+  box-sizing: border-box;
   border-radius: 5px;
   border: 1px solid #ccc;
 }
 
-.search-container button {
-  padding: 7px 14px;
-  border: none;
-  background-color: #8050F2;
-  color: #fff;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.search-container input:focus {
+  border: 1px solid #8050f2;
+  box-shadow: 0 0 0 3px rgba(128, 80, 242, 0.1);
+  outline: none;
 }
 
 .search-container button:hover {
@@ -119,6 +118,10 @@ nav {
   margin: 10px 0;
   cursor: pointer;
 }
+.user-item:hover {
+  transform: translateY(-4px);
+  color:#8050f2
+}
 .user-item img {
   border-radius: 50%;
   margin-right: 10px;
@@ -127,13 +130,21 @@ nav {
 .nav-right-container {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 10px;
+  padding: 0 60px;
 }
 
 .nav-right {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  flex-direction: column;
+  gap: 8px;               
+  padding: 6px 16px;     
+  background: #fff;    
+  box-shadow: -5px -5px 10px #f6f6f6, 5px 5px 10px #f6f6f6;
+  border: 1px solid #ece6ff;
+  border-radius: 20px;
+  cursor: pointer;
 }
 
 .profile-img {
@@ -141,12 +152,19 @@ nav {
   cursor: pointer;
 }
 
-#username {
-  margin-top: 5px;
-  font-weight: 500;
-  color: #333;
+.profile {
+  display: flex;
+  align-items: center;  
+  gap: 8px;             
 }
 
+#userId {
+  width: 70px;
+  margin-top: 0;
+  font-weight: 600;
+  font-size: 20px;
+  color: #333;
+}
 
 /* 링크 밑줄 제거 */
 a {

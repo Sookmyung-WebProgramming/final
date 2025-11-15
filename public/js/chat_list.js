@@ -69,7 +69,7 @@ function renderChatList(roomsToDisplay) {
         </div>
         <span class="subBox">
           ${room.unreadCount ? `<span class="unread-count">${room.unreadCount}</span>` : ''}
-          <span class="time">${room.updatedAt ? new Date(room.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}</span>
+          <span class="cl-time">${room.updatedAt ? new Date(room.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}</span>
         </span>
       </a>
     `;
