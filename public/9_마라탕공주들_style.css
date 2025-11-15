@@ -36,9 +36,9 @@ nav {
 }
 
 .logo img {
-  width: 50%;
+  width: 60%;
   min-width: 100px;
-  margin-left: 80px;
+  /* margin-left: 80px; */
 }
 
 .menu {
@@ -117,6 +117,7 @@ nav {
   align-items: center;
   margin: 10px 0;
   cursor: pointer;
+  height: 20px;
 }
 .user-item:hover {
   transform: translateY(-4px);

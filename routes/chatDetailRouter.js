@@ -5,7 +5,7 @@ const Message = require("../models/Message");
 const User = require("../models/User");
 const Checklist = require("../models/Checklist");
 const userService = require("../services/userService");
-const ChatRoom = require("../models/ChatRoom");
+const ChatRoom = require("../models/chatRoom");
 
 // 특정 채팅방 메시지 가져오기 API
 router.get("/api/chatrooms/:roomId/messages", userService.authenticate, async (req, res) => {
