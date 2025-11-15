@@ -182,7 +182,7 @@ io.on("connection", (socket) => {
 // ===== 서버 실행 =====
 const PORT = 3000;
 const HOST = "0.0.0.0";
-const IP = "192.168.35.174";
+const IP = "172.20.93.109";
 
 server.listen(PORT, HOST, () => {
   console.log(`서버 실행 중 : http://${IP}:${PORT}`);
