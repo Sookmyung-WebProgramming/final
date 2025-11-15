@@ -351,6 +351,8 @@ input[type="checkbox"]:checked {
   background-color: #E8e4ff;
   border-radius: 10px;
   margin-right:10px;
+  margin-left:0;
+  flex-shrink: 0; 
 }
 
 .chat-img-group {
@@ -358,7 +360,7 @@ input[type="checkbox"]:checked {
   height: 40px;
   display: flex;
   flex-wrap: wrap;
-  margin-right: 12px;
+  margin-right: 10px;
 }
 
 .chat-member-square {
@@ -377,11 +379,12 @@ input[type="checkbox"]:checked {
 .chat-preview {
   color: #888;
   font-size: 14px;
-  margin-top:4px;
+  margin-bottom:8px;
 }
 
 .chat-name {
   margin-left: 0px;
+  margin-top: 10px;
 }
 
 .chat-time {
@@ -411,7 +414,7 @@ input[type="checkbox"]:checked {
   gap:12px;
   align-items: center;
   background-color: #f9f9f9;
-  padding: 12px 15px;
+  padding: 3px 10px;
   border-radius: 8px;
   text-decoration: none;
   color: #80828f;
@@ -419,7 +422,7 @@ input[type="checkbox"]:checked {
 }
 
 .unread-chat-list a:hover {
-  background-color: #EDE8FF;
+  background-color: #d8cdff;
 }
 
 .unread-count {
