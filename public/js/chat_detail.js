@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             <div class="meta">
               <img src="images/9_vacantheart.png" class="heart-icon" alt="좋아요" data-liked="false" data-msg-id="${msg._id}">
               <span class="time">${localTimeStr}</span>
-              <button class="checklist-btn" style="margin-left:5px;">📋 할 일</button>
+              <button class="checklist-btn">📋</button>
             </div>
           </div>
           <div class="checklist-form" style="display:none; margin-top:5px;">

@@ -1,10 +1,10 @@
 /* ===== 전체 레이아웃 ===== */
-.container {
+.chat-detail-container {
   display: flex;
   align-items: flex-start;
   justify-content: center;
   gap: 30px;
-  padding: 40px 60px;
+  padding: 30px 50px;
   box-sizing: border-box;
 }
 
@@ -78,7 +78,7 @@ nav .menu a:hover {
 
 .sidebar {
   flex: 0 0 20%;
-  max-width: 280px;
+  max-width: 200px;
   background-color: #ffffff;
   border-radius: 15px;
   padding: 25px 20px;
@@ -138,10 +138,11 @@ nav .menu a:hover {
 .chat-window {
   flex: 1;
   max-width: 900px;
+  max-height: 40vw;
   background-color: #ffffff;
   border-radius: 15px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  padding: 20px;
+  padding: 25px;
   display: flex;
   flex-direction: column;
 }
@@ -182,7 +183,7 @@ nav .menu a:hover {
 
 .chat-header .member-count::before {
   content: "👤";
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .chat-date {
@@ -218,6 +219,7 @@ nav .menu a:hover {
   height: 48px;
   border-radius: 50%;
   object-fit: cover;
+  margin: 15px;
 }
 
 .chat-name {
@@ -262,6 +264,10 @@ nav .menu a:hover {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  margin: 0 -10px;
+}
+.message.friend .chat-content {
+  margin: 0 -10px;
 }
 
 
@@ -305,18 +311,18 @@ nav .menu a:hover {
 
 /* 기본(상대방): 버블 → 시간(1) → 할 일(2) → 하트(3) */
 .message.friend .bubble-row .meta .time               { order: 1; }
-.message.friend .bubble-row .meta :is(.todo,.checklist-btn){ order: 2; }
-.message.friend .bubble-row .meta .heart-icon         { order: 3; }
+.message.friend .bubble-row .meta .heart-icon         { order: 2; }
+.message.friend .bubble-row .meta :is(.todo,.checklist-btn){ order: 3; }
 
 /* 나(me): (메타가 왼쪽) 하트(1) → 할 일(2) → 시간(3)  */
-.message.me .bubble-row .meta .heart-icon             { order: 1; }
-.message.me .bubble-row .meta :is(.todo,.checklist-btn){ order: 2; }
+.message.me .bubble-row .meta :is(.todo,.checklist-btn){ order: 1; }
+.message.me .bubble-row .meta .heart-icon             { order: 2; }
 .message.me .bubble-row .meta .time                   { order: 3; }
 
 
-.time {
+/* .time {
   margin-left: 1px;
-}
+} */
 
 .message.highlighted {
   background-color: #fff8dc; /* 스크롤된 메시지는 노랑색 배경 */
@@ -448,4 +454,42 @@ img.chat-media { max-height: 60vh; }
   }
   .bubble--image { max-width: 92vw; }
   .bubble--video { max-width: 92vw; }
+}
+
+/* ===== '할 일' 버튼을 아이콘처럼 스타일링 ===== */
+.checklist-btn {
+  background: none; 
+  border: none; 
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  font-size: 1.4em; /* 이모지 크기를 주변과 맞춤 */
+
+  width: 20px;
+  height: 20px;
+  
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle; /* 다른 요소와 세로 정렬 */
+  
+  transition: transform 0.2s ease;
+}
+
+.checklist-btn:hover {
+  transform: scale(1.1); /* 하트 아이콘과 동일한 호버 효과 */
+}
+
+
+.bubble-row .meta .checklist-btn {
+  visibility: hidden; 
+  opacity: 0;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+/* .bubble-row에 마우스를 올렸을 때만 아이콘 표시 */
+.bubble-row:hover .meta .checklist-btn {
+  visibility: visible; 
+  opacity: 1;
 }
