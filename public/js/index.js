@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
 
-    // 안읽은 채팅
+  // 안읽은 채팅
     const chatRes = await fetch("/api/chatrooms", { credentials: "include" });
     const chatData = await chatRes.json();
 
@@ -107,9 +107,43 @@ document.addEventListener("DOMContentLoaded", async () => {
       unreadListEl.innerHTML = `<li><span class="todo-empty">읽지 않은 채팅이 없습니다.</span></li>`;
     } else {
       unreadRooms.forEach(room => {
+        let others = 0;
+
+        if (Array.isArray(room.members)) {
+          others = room.members.length;
+        } else if (Array.isArray(room.participants)) {
+          others = room.participants.length;
+        } else if (typeof room.memberCount === "number") {
+          others = room.memberCount - 1; // 이건 백엔드 구현에 따라 다름
+        }
+
+        const totalMembers = others + 1; // 나 포함
+
+        console.log(room.name, "totalMembers =", totalMembers);
+        
+        // 아이콘 HTML 생성
+        let iconHTML = "";
+
+        if (totalMembers <= 2) {
+          // 1:1 채팅 → 단일 네모 박스
+          iconHTML = `
+            <div class="chat-img"></div>
+          `;
+        } else {
+          // 3인 이상 → 2x2 네모 아이콘
+          iconHTML = `
+            <div class="chat-img-group">
+              <div class="chat-member-square"></div>
+              <div class="chat-member-square"></div>
+              <div class="chat-member-square"></div>
+              <div class="chat-member-square"></div>
+            </div>
+          `;
+        }
         unreadListEl.innerHTML += `
           <li>
             <a href="9_마라탕공주들_chat_detail.html?roomId=${room._id}">
+              ${iconHTML}   
               <div class="chat-text">
                 <span class="chat-name">${room.name}</span>
                 <span class="chat-preview">${room.lastMessage || ""}</span>
@@ -126,7 +160,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   } catch (err) {
     console.error("홈 데이터 로드 실패 : ", err);
   }
-
+  
 });
 
   document.addEventListener("DOMContentLoaded", () => {

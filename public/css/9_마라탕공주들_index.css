@@ -151,7 +151,6 @@
   position: relative;
   width: 120px;
   height: 120px;
-  
   overflow: visible;
 
 }
@@ -192,6 +191,7 @@
 }
 
 .profile-name{
+  font-size: 20px;
   font-weight: bold;
   color: #333;
   margin-bottom: 8px;
@@ -199,7 +199,7 @@
 }
 
 .profile-status{
-  font-size: 13px;
+  font-size: 15px;
 }
 
 
@@ -350,18 +350,18 @@ input[type="checkbox"]:checked {
   height: 40px;
   background-color: #E8e4ff;
   border-radius: 10px;
-  margin-right: 10px;
+  margin-right:10px;
 }
 
-.chat-img1{
+.chat-img-group {
   width: 40px;
   height: 40px;
   display: flex;
   flex-wrap: wrap;
-  margin-right:10px;
+  margin-right: 12px;
 }
 
-.square {
+.chat-member-square {
   width: 18px;
   height: 18px;
   background-color: #E8e4ff;
