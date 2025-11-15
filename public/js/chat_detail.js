@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const roomData = await roomRes.json();
       if (roomData.success && roomData.room) {
         const { name, members } = roomData.room;
-        document.getElementById("roomName").textContent = name || "채팅방";
+        document.getElementById("roomName").innerText = name || "채팅방";
         document.getElementById("memberCount").textContent = (members?.length ?? 1);
       }
     } catch (e) {
@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             <div class="meta">
               <img src="images/9_vacantheart.png" class="heart-icon" alt="좋아요" data-liked="false" data-msg-id="${msg._id}">
               <span class="time">${localTimeStr}</span>
-              <button class="checklist-btn" style="margin-left:5px;">📋 할 일</button>
+              <button class="checklist-btn">📋</button>
             </div>
           </div>
           <div class="checklist-form" style="display:none; margin-top:5px;">
@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const input = div.querySelector(".checklist-form input");
 
       btn.addEventListener("click", () => {
-        form.style.display = form.style.display === "none" ? "block" : "none";
+        form.style.display = form.style.display === "none" ? "flex" : "none";
       });
 
       submitBtn.addEventListener("click", async () => {
