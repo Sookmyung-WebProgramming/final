@@ -321,6 +321,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const label = document.createElement("label");
         label.htmlFor = `task-${index}`;
         label.textContent = task.content;
+        label.style.fontSize = "16px";
 
         const badge = document.createElement("a");
         badge.href = '9_마라탕공주들_chat_detail.html?roomId=' + encodeURIComponent(task.roomId) + '&time=' + encodeURIComponent(task.createdAt);
