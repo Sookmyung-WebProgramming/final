@@ -37,9 +37,10 @@ body {
     transition: 0.3s;
 }
 
+/* 카드 호버 효과 제거 */
 .setting-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transform: none;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
 .setting-card h2 {
@@ -59,6 +60,8 @@ body {
     font-size: 16px;
     cursor: pointer;
     transition: 0.3s;
+    min-width: 100px;
+    text-align: center;
 }
 
 .action-btn:hover {
@@ -98,6 +101,7 @@ body {
     border: 1px solid #ddd;
     border-radius: 8px;
     font-size: 16px;
+    font-family: "Pretendard", "Noto Sans KR", sans-serif;
     resize: none;
 }
 
@@ -106,6 +110,42 @@ body {
     justify-content: center;
     gap: 12px;
     margin-top: 8px;
+}
+
+/* 저장하기 버튼 */
+.setting-btn {
+    background: #8050F2;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-align: center;
+}
+
+.setting-btn:hover {
+    opacity: 0.85;
+}
+
+/* 취소 버튼 */
+.cancel-btn {
+    background: #6c757d;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-align: center;
+}
+
+.cancel-btn:hover {
+    opacity: 0.85;
 }
 
 /* ---------------- 알림 ---------------- */
@@ -212,13 +252,18 @@ body {
 }
 
 /* 친구 정보 + 버튼 */
-.friend-info {
+.friend-info,
+.friend-list li span {
     display: flex;
     align-items: center;
     gap: 8px;
+    min-height: 32px;
 }
 
-.friend-list li button.action-btn {
+.friend-list li button.action-btn,
+.friend-list li .action-btn,
+.friend-list li .remove-btn,
+.friend-list li .add-btn {
     background: #8050F2;
     color: #fff;
     border: none;
@@ -228,8 +273,13 @@ body {
     font-size: 14px;
     cursor: pointer;
     transition: 0.3s;
+    text-align: center;
+    min-width: auto;
 }
 
-.friend-list li button.action-btn:hover {
+.friend-list li button.action-btn:hover,
+.friend-list li .action-btn:hover,
+.friend-list li .remove-btn:hover,
+.friend-list li .add-btn:hover {
     opacity: 0.85;
 }

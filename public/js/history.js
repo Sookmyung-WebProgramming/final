@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // 상단 프로필 이미지 표시
     const navProfileImg = document.querySelector(".nav-right .profile-img");
     if (navProfileImg) {
-      navProfileImg.src = meData.user?.profileImg || "images/9_person_50dp_FFFFFF.svg";
+      navProfileImg.src = meData.user?.profileImg || "images/9_profile.jpg";
     }
     await loadRooms();
     await loadHistory();
@@ -230,7 +230,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     // 썸네일
     const thumbDiv = document.createElement("div");
     thumbDiv.className = "media-thumb";
-    thumbDiv.style.cursor = "pointer";
     thumbDiv.addEventListener("click", () => window.open(item.content, "_blank"));
     
     if (item.type === "image") {
@@ -252,10 +251,21 @@ document.addEventListener("DOMContentLoaded", async () => {
       thumbDiv.appendChild(img);
     }
 
+    // 원본 메시지로 이동 버튼
+    const gotoButton = document.createElement("button");
+    gotoButton.className = "goto-message-btn";
+    gotoButton.textContent = "원본 메시지로 이동";
+    gotoButton.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (item.chatRoomId && item.createdAt) {
+        window.location.href = `/9_마라탕공주들_chat_detail.html?roomId=${item.chatRoomId}&time=${encodeURIComponent(item.createdAt)}`;
+      }
+    });
+    thumbDiv.appendChild(gotoButton);
+
     // 메타 정보
     const metaDiv = document.createElement("div");
     metaDiv.className = "media-meta";
-    metaDiv.style.cursor = "pointer";
     
     const titleP = document.createElement("p");
     titleP.className = "media-title";
@@ -267,11 +277,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     
     metaDiv.appendChild(titleP);
     metaDiv.appendChild(dateP);
-    metaDiv.addEventListener("click", () => {
-      if (item.chatRoomId && item.createdAt) {
-        window.location.href = `/9_마라탕공주들_chat_detail.html?roomId=${item.chatRoomId}&time=${encodeURIComponent(item.createdAt)}`;
-      }
-    });
 
     div.appendChild(thumbDiv);
     div.appendChild(metaDiv);
