@@ -18,8 +18,10 @@
   background-color: #fff;
   border-radius: 12px;
   padding: 25px;
-  height: 200px;
+  display: flex;
+  flex-direction: column;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  align-self: stretch;
 }
 
 .filter-section h3 {
