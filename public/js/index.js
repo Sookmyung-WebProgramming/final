@@ -128,3 +128,42 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
 });
+
+  document.addEventListener("DOMContentLoaded", () => {
+  const cards = document.querySelectorAll(".hero-card");
+  const dots = document.querySelectorAll(".hero-dot");
+  if (!cards.length) return;
+
+  let current = 0;
+  const total = cards.length;
+  let timer = null;
+
+  function showSlide(index) {
+    cards[current].classList.remove("active");
+    dots[current].classList.remove("active");
+
+    current = index;
+
+    cards[current].classList.add("active");
+    dots[current].classList.add("active");
+  }
+
+  function nextSlide() {
+    const next = (current + 1) % total;
+    showSlide(next);
+  }
+
+  // 자동 슬라이드 시작 (4초마다)
+  timer = setInterval(nextSlide, 4000);
+
+  // 점 클릭 시 해당 카드로 이동 + 자동 슬라이드 리셋
+  dots.forEach(dot => {
+    dot.addEventListener("click", () => {
+      const index = Number(dot.dataset.index);
+      clearInterval(timer);
+      showSlide(index);
+      timer = setInterval(nextSlide, 4000);
+    });
+  });
+});
+
