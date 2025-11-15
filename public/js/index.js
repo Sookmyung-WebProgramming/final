@@ -55,7 +55,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.checked = task.checked;
-        //할 일 체크시 체크리스트랑 연동+ 체크 유지 기능 
+
+        //할 일 체크시 체크리스트 연동 
         checkbox.addEventListener("change", async () => {
           try {
             await fetch(`/api/checklist/item/${task._id}`, {
@@ -64,17 +65,14 @@ document.addEventListener("DOMContentLoaded", async () => {
               credentials: "include",
               body: JSON.stringify({ checked: checkbox.checked }),
             });
-          
           } catch (err) {
             console.error(err);
-            
             checkbox.checked = !checkbox.checked;
           }
         });
 
         const label = document.createElement("label");
         label.textContent = task.content;
-
 
         const roomBtn = document.createElement("button");
         roomBtn.textContent = task.roomName || "룸 이름 없음";
@@ -91,46 +89,44 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
 
-  // 안읽은 채팅
+    // 안읽은 채팅
     const chatRes = await fetch("/api/chatrooms", { credentials: "include" });
     const chatData = await chatRes.json();
 
     const unreadRooms = chatData.chatRooms.filter(r => r.unreadCount > 0);
-    const totalUnread = unreadRooms.reduce((sum, r) => sum + r.unreadCount, 0);
 
+    // 각 방의 멤버 숫자 조회
+    const roomsWithMembers = await Promise.all(
+      unreadRooms.map(async (room) => {
+        try {
+          const res = await fetch(`/api/chatrooms/${encodeURIComponent(room._id)}`, {
+            credentials: "include",
+          });
+          const data = await res.json();
+
+          const memberCount = data?.room?.members?.length ?? 1;
+          return { ...room, memberCount };
+        } catch (e) {
+          console.warn("멤버 수 불러오기 실패:", room.name, e);
+          return { ...room, memberCount: 1 };
+        }
+      })
+    );
+
+    const totalUnread = roomsWithMembers.reduce((sum, r) => sum + r.unreadCount, 0);
     document.querySelector(".title-num").textContent = totalUnread;
 
     const unreadListEl = document.querySelector(".unread-chat-list");
     unreadListEl.innerHTML = "";
 
-    if (unreadRooms.length === 0) {
+    if (roomsWithMembers.length === 0) {
       unreadListEl.innerHTML = `<li><span class="todo-empty">읽지 않은 채팅이 없습니다.</span></li>`;
     } else {
-      unreadRooms.forEach(room => {
-        let others = 0;
+      roomsWithMembers.forEach(room => {
+        const totalMembers = room.memberCount || 1;
 
-        if (Array.isArray(room.members)) {
-          others = room.members.length;
-        } else if (Array.isArray(room.participants)) {
-          others = room.participants.length;
-        } else if (typeof room.memberCount === "number") {
-          others = room.memberCount - 1; // 이건 백엔드 구현에 따라 다름
-        }
-
-        const totalMembers = others + 1; // 나 포함
-
-        console.log(room.name, "totalMembers =", totalMembers);
-        
-        // 아이콘 HTML 생성
         let iconHTML = "";
-
-        if (totalMembers <= 2) {
-          // 1:1 채팅 → 단일 네모 박스
-          iconHTML = `
-            <div class="chat-img"></div>
-          `;
-        } else {
-          // 3인 이상 → 2x2 네모 아이콘
+        if (totalMembers >= 3) {
           iconHTML = `
             <div class="chat-img-group">
               <div class="chat-member-square"></div>
@@ -139,11 +135,14 @@ document.addEventListener("DOMContentLoaded", async () => {
               <div class="chat-member-square"></div>
             </div>
           `;
+        } else {
+          iconHTML = `<div class="chat-img"></div>`;
         }
+
         unreadListEl.innerHTML += `
           <li>
             <a href="9_마라탕공주들_chat_detail.html?roomId=${room._id}">
-              ${iconHTML}   
+              ${iconHTML}
               <div class="chat-text">
                 <span class="chat-name">${room.name}</span>
                 <span class="chat-preview">${room.lastMessage || ""}</span>
@@ -157,13 +156,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         `;
       });
     }
+
   } catch (err) {
-    console.error("홈 데이터 로드 실패 : ", err);
+    console.error("홈 로딩 중 오류:", err);
   }
-  
 });
 
-  document.addEventListener("DOMContentLoaded", () => {
+// ----------------------------------------------------------
+// 슬라이더 부분
+// ----------------------------------------------------------
+
+document.addEventListener("DOMContentLoaded", () => {
   const cards = document.querySelectorAll(".hero-card");
   const dots = document.querySelectorAll(".hero-dot");
   if (!cards.length) return;
@@ -187,10 +190,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     showSlide(next);
   }
 
-  // 자동 슬라이드 시작 (4초마다)
   timer = setInterval(nextSlide, 4000);
 
-  // 점 클릭 시 해당 카드로 이동 + 자동 슬라이드 리셋
   dots.forEach(dot => {
     dot.addEventListener("click", () => {
       const index = Number(dot.dataset.index);
@@ -200,4 +201,3 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   });
 });
-
