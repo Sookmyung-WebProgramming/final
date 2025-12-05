@@ -67,6 +67,25 @@
   max-height: 200px;
 }
 
+.memo-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.memo-save-btn {
+  padding: 6px;
+  background: #ffdfa5;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.memo-save-btn:hover {
+  background: #ffcd78;
+}
+
+/* ================== 채팅 영역 =================== */
 .chat-window {
   flex: 1;
   max-width: 900px;

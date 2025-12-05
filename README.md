@@ -1,81 +1,49 @@
-# 💬 송이톡 (Chat App Server)
+# 💬 송이톡 (Chat Application Server)
 
-Node.js + Express + MongoDB 기반 **실시간 채팅 서버**  
-MongoDB Atlas 클라우드 DB 연결 + Socket.IO 실시간 통신 지원
-
----
-
-## 📦 프로젝트 개요
-
-| 구분 | 내용 |
-|------|------|
-| **개발 환경** | Node.js v22+, Express, MongoDB Atlas |
-| **주요 기능** | 회원가입 / 로그인, 친구 추가, 실시간 채팅, 메시지 읽음 처리, 체크리스트, 보관함, 설정 |
-| **DB** | MongoDB Atlas (Cloud) |
-| **실행 방식** | `npm start` |
+Node.js 기반 실시간 채팅 서버입니다.  
+MongoDB Atlas(클라우드 DB)를 사용하며 Socket.IO로 실시간 메시지를 처리합니다.
 
 ---
 
-## ⚙️ 실행 전 준비사항
+## 📌 사용 기술
 
-### 1️⃣ Node.js 설치
-- [Node.js 공식 사이트](https://nodejs.org/) 접속
-- LTS 버전 다운로드 및 설치
-- 설치 확인
-```bash
+- Node.js + Express
+- MongoDB Atlas
+- Socket.IO (실시간 통신)
+
+---
+
+## 🚀 실행 방법
+
+아래 순서대로 따라 하시면 프로젝트를 실행할 수 있습니다.
+
+---
+
+### 1️⃣ Node.js 설치 확인
 node -v
 npm -v
-``````
 
-### 2️⃣ 프로젝트 클론
-```bash
-git clone https://github.com/Sookmyung-WebProgramming/final.git
-cd final 
-``````
-
-### 3️⃣ 의존성 설치
-```bash
+### 2️⃣ 프로젝트 패키지 설치
 npm install
-``````
 
-### 4️⃣ 환경변수 설정
-프로젝트 루트(server/)에 .env 파일 추가
-```bash
-PORT=3000
-MONGO_URI=mongodb+srv://<유저이름>:<비밀번호>@<클러스터주소>/<DB이름>
-`````` 
-⚠️ .env 파일은 보안상 GitHub에 포함하지 않음. 팀 내 공유 파일 사용
-
-### 5️⃣ 서버 실행
-```bash
-// 1. cmd 에 ipconfig 입력.
-``````
-<img width="300" height="250" alt="image" src="https://github.com/user-attachments/assets/8d2492fd-acfa-4d50-99b1-4e7d4d8e588d" />
-
-```bash
-// 2. server.js 의 마지막 부분에서 IP 를 위 IP로 교체
-const IP = "172.20.57.49"; 
-
-// 3. 터미널에서 실행
+### 3️⃣ IP 주소 설정
+1. cmd 실행 후 명령어 입력 : ipconfig 
+2. IPv4 주소를 확인한 뒤 server.js 의 마지막 부분을 아래처럼 수정합니다.
+   const IP = "위의 IPv4 주소";
+   
+### 4️⃣ 서버 실행
 npm start
-``````
 
-### 정상 실행 시 출력 예시
-```bash
-✅ MongoDB 연결 성공
+### 정상 실행 예시
+✅ MongoDB Connected
 🚀 Server running on http://172.20.57.49:3000
-``````
 
-## 🧪 테스트
-브라우저 또는 Postman에서 확인
-```bash
-// 172.20.57.49 대신 본인의 IP로 대체!!
-http://172.20.57.49:3000/9_%EB%A7%88%EB%9D%BC%ED%83%95%EA%B3%B5%EC%A3%BC%EB%93%A4_login.html
-``````
+### 5️⃣ 브라우저에서 접속
+http://(위의 IP):3000/login.html
+동일한 Wi-Fi 네트워크에 연결된 모든 기기에서 접속 가능합니다.
 
-## 📚 참고 자료
-- MongoDB Atlas 공식 문서
-- Express 공식 문서
-- Socket.IO 공식 문서
+---
 
-© 2025 Sookmyung Web Programming Team. All rights reserved.
+## 📌 시연 안내
+본 프로젝트는 실시간 채팅 기능을 포함하고 있어,
+시연 시 교수님 기기와 팀원 기기 간 메시지가 즉시 전달되는 모습을 확인하실 수 있습니다.

@@ -228,5 +228,29 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("채팅 불러오기 실패 :", err);
     document.querySelector(".chat-messages").innerHTML = `<div>메시지를 불러올 수 없습니다.</div>`;
   }
-  
+
+  // ===== 메모 저장 기능 추가 =====
+  const memoArea = document.getElementById("memoArea");
+  const saveMemoBtn = document.getElementById("saveMemoBtn");
+
+  const memoKey = `memo:${userId}`;
+
+  // 기존 저장된 메모 불러오기
+  const savedMemo = localStorage.getItem(memoKey);
+  if (savedMemo) memoArea.value = savedMemo;
+
+  // 저장 버튼 클릭 → 로컬스토리지 저장
+  saveMemoBtn.addEventListener("click", () => {
+    const text = memoArea.value.trim();
+    localStorage.setItem(memoKey, text);
+    
+    saveMemoBtn.textContent = "✔ 저장됨";
+    saveMemoBtn.style.background = "#a6e8a1";
+
+    setTimeout(() => {
+      saveMemoBtn.textContent = "💾 저장";
+      saveMemoBtn.style.background = "#ffdfa5";
+    }, 1500);
+  });
+    
 });

@@ -245,9 +245,29 @@ document.addEventListener("DOMContentLoaded", async () => {
       video.preload = "metadata";
       thumbDiv.appendChild(video);
     } else {
+      
+      // 파일/링크일 경우 : 썸네일 풀에서 랜덤 선택
       const img = document.createElement("img");
-      img.src = "images/9_logo.svg";
-      img.alt = "파일/링크";
+
+      const thumbnailPool = [
+        "https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9791190867566.jpg",
+        "https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9791186872802.jpg",
+        "https://kr.object.ncloudstorage.com/changbi/images/2024/4/240430_359caf29-615e-4504-b8e3-bc322f1d8335.jpg",
+        "https://www.palnews.co.kr/news/photo/202305/219351_59072_2711.jpg",
+        "https://cdn.knnj.co.kr/news/photo/202501/2228_10078_1252.jpg",
+        "https://image.aladin.co.kr/product/32069/12/cover500/k652834991_1.jpg",
+        "https://shopping-phinf.pstatic.net/main_4349319/43493196620.20231028091804.jpg",
+        "https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9788989420507.jpg",
+        "https://image.aladin.co.kr/product/33529/41/cover500/scm9522568609778.jpg",
+        "https://www.bookswindow.com/file/2237390/363373-500x735-hangangeul-igneunda-apple-seed-jpg.jpg"
+      ];
+
+      // 랜덤 인덱스 생성
+      const randomIndex = Math.floor(Math.random() * thumbnailPool.length);
+
+      img.src = thumbnailPool[randomIndex];
+      img.alt = "파일/링크 썸네일";
+
       thumbDiv.appendChild(img);
     }
 
